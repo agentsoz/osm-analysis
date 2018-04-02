@@ -2,9 +2,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 public class Main {
 	
+	static final Logger LOG = Logger.getLogger(Main.class.getName());
 	
 	public static void main(String args[]) {
 		
@@ -22,19 +24,24 @@ public class Main {
 			
 			insert = HandleWay.getInstance();
 			insert.insert(stm, con);
+			LOG.info("insert into ways successfully");
 			insert = HandleRelation.getInstance();
 			insert.insert(stm, con);
+			LOG.info("insert into relations successfully");
 			insert = HandleNode.getInstance();
 			insert.insert(stm, con);
+			LOG.info("insert into nodes successfully");
 			
 			con.setAutoCommit(true);
 			stm.close();
 			con.close();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
+			LOG.severe("ClassNotFoundException");
 			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			LOG.severe("SQLException");
 			e.printStackTrace();
 		}
 	
