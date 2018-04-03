@@ -27,9 +27,9 @@ public class HandleNode {
 	public boolean ifTurn(double k1, double k2) {
 		double tan = k1-k2/1+k1*k2;
 		if(tan > 0) {
-			return true;
-		}else {
 			return false;
+		}else {
+			return true;
 		}
 	}
 	
