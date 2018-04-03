@@ -4,9 +4,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
-public class Main {
+public class Store_Main {
 	
-	static final Logger LOG = Logger.getLogger(Main.class.getName());
+	static final Logger LOG = Logger.getLogger(Store_Main.class.getName());
 	
 	public static void main(String args[]) {
 		
@@ -22,13 +22,13 @@ public class Main {
 			
 			createTable(stm, con);
 			
-			insert = HandleWay.getInstance();
+			insert = StoreWay.getInstance();
 			insert.insert(stm, con);
 			LOG.info("insert into ways successfully");
-			insert = HandleRelation.getInstance();
+			insert = StoreRelation.getInstance();
 			insert.insert(stm, con);
 			LOG.info("insert into relations successfully");
-			insert = HandleNode.getInstance();
+			insert = StoreNode.getInstance();
 			insert.insert(stm, con);
 			LOG.info("insert into nodes successfully");
 			
@@ -43,7 +43,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			LOG.severe("SQLException");
 			e.printStackTrace();
-		}
+		} 
 	
 	}
 	
@@ -68,7 +68,7 @@ public class Main {
 				+ "member_type TEXT,"
 				+ "member_ref TEXT,"
 				+ "member_role TEXT)";
-		String nodes = "CREATE TABLE nodes(id INT PRIMARY KEY NOT NULL,"
+		String nodes = "CREATE TABLE nodes(id TEXT PRIMARY KEY NOT NULL,"
 				+ "version TEXT,"
 				+ "timestamp TEXT,"
 				+ "uid TEXT,"

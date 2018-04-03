@@ -9,14 +9,14 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-public class HandleWay implements InsertData {
+public class StoreWay implements InsertData {
 	
-	private static HandleWay instance;
+	private static StoreWay instance;
 	
-	public static HandleWay getInstance() {
+	public static StoreWay getInstance() {
 		
 		if(instance == null) {
-			instance = new HandleWay();
+			instance = new StoreWay();
 		}
 		
 		return instance;

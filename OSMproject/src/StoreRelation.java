@@ -7,14 +7,14 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-public class HandleRelation implements InsertData {
+public class StoreRelation implements InsertData {
 
-	private static HandleRelation instance;
+	private static StoreRelation instance;
 	
-	public static HandleRelation getInstance() {
+	public static StoreRelation getInstance() {
 		
 		if(instance == null) {
-			instance = new HandleRelation();
+			instance = new StoreRelation();
 		}
 		
 		return instance;

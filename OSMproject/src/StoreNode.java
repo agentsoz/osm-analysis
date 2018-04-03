@@ -4,16 +4,15 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
-public class HandleNode implements InsertData {
+public class StoreNode implements InsertData {
 	
-	private static HandleNode instance;
+	private static StoreNode instance;
 	
-	public static HandleNode getInstance() {
+	public static StoreNode getInstance() {
 		
 		if(instance == null) {
-			instance = new HandleNode();
+			instance = new StoreNode();
 		}
 		
 		return instance;
