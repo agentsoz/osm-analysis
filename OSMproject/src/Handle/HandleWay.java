@@ -25,7 +25,7 @@ public class HandleWay {
 		}
 		return instance;
 	}
-	
+	//get the way information 
 	public void getWays() {
 		
 		int count_streetNameNull = 0;
@@ -65,7 +65,17 @@ public class HandleWay {
 		}
 
 	}
-	
+	/*
+	 * check if there are any incorrect max speed problem between two connected ways
+	 * firstly, compare two ways by two "for" loop to get every two connected way, way 'i' and way 'j', for example
+	 * in addition, if two ways are connected, there are four situation
+	 * 1. i.beginNode == j.beginNode
+	 * 2. i.beginNode == j.endNode
+	 * 3. i.endNode == j.beginNode
+	 * 4. i.endNode == j.endNode
+	 * secondly, judge speed_gap = i.maxspeed - j.maxspeed
+	 * thirdly, judge if the included angle of two nodes <= 90
+	 * */
 	public void inCorrectMaxSpeed() {
 		// TODO Auto-generated method stub
 		
@@ -74,31 +84,31 @@ public class HandleWay {
 		int w1_node_size;
 		int w2_node_size;
 		int count_speed = 0;
-		//第一条路
+		//the first way
 		for(int i=0;i<ways.size() - 1;i++) {
-			//第一条路的node的数量
+			//the number of nodes of the first way
 			w1_node_size = ways.get(i).nodes_ref.size();
-			//第一条路的开始node
+			//the begin node of the first way
 			String w1_begin = ways.get(i).nodes_ref.get(0);
-			//第一条路的结束node
+			//the end node of the first way
 			String w1_end = ways.get(i).nodes_ref.get(w1_node_size-1);
-			//第二条路
+			//the second way
 			for(int j=i+1;j<ways.size();j++) {
-				//第二条路的node的数量
+				//the number of nodes of the second way
 				w2_node_size = ways.get(j).nodes_ref.size();
-				//第二条路的开始node
+				//the begin node of the second way
 				String w2_begin = ways.get(j).nodes_ref.get(0);
-				//第二条路的结束node
+				//the end node of the second way
 				String w2_end = ways.get(j).nodes_ref.get(w2_node_size-1);
-				//速度差
-				int speed_diff;
-				//如果两条way有一个名字 说明是一条路
+				//the speed gap
+				int speed_gap;
+				//if two ways have same name, they are the same street
 				if(ways.get(i).name.equals(ways.get(j).name)) {
 					continue;
 				}
-				//如果第一条路的开始node和第二条路的开始node一样
+				
 				if(w1_begin.equals(w2_begin)) {
-					speed_diff = ways.get(i).maxspeed - ways.get(j).maxspeed;
+					speed_gap = ways.get(i).maxspeed - ways.get(j).maxspeed;
 					
 					Node w1_n1 = ins.getNode(w1_begin);
 					Node w1_n2 = ins.getNode(ways.get(i).nodes_ref.get(1));
@@ -108,14 +118,14 @@ public class HandleWay {
 					
 					boolean ifturn = ins.ifTurn(ins.getSlope(w1_n1, w1_n2), ins.getSlope(w2_n1, w2_n2));
 					
-					if(ifturn && Math.abs(speed_diff) > 60) {
+					if(ifturn && Math.abs(speed_gap) > 60) {
 						count_speed++;
 					}
 					
 				}
-				//如果第一条路的结束node和第二条路的开始node一样
+				
 				if(w1_end.equals(w2_begin)) {
-					speed_diff = ways.get(i).maxspeed - ways.get(j).maxspeed;
+					speed_gap = ways.get(i).maxspeed - ways.get(j).maxspeed;
 					
 					Node w1_n1 = ins.getNode(w1_end);
 					Node w1_n2;
@@ -130,14 +140,14 @@ public class HandleWay {
 			
 					boolean ifturn = ins.ifTurn(ins.getSlope(w1_n1, w1_n2), ins.getSlope(w2_n1, w2_n2));
 					
-					if(ifturn && Math.abs(speed_diff) > 60) {
+					if(ifturn && Math.abs(speed_gap) > 60) {
 						count_speed++;
 					}
 					
 				}
-				//如果第一条路的开始node和第二条路的结束node一样
+				
 				if(w1_begin.equals(w2_end)) {
-					speed_diff = ways.get(i).maxspeed - ways.get(j).maxspeed;
+					speed_gap = ways.get(i).maxspeed - ways.get(j).maxspeed;
 					
 					Node w1_n1 = ins.getNode(w1_begin);
 					Node w1_n2 = ins.getNode(ways.get(i).nodes_ref.get(1));
@@ -153,14 +163,14 @@ public class HandleWay {
 			
 					boolean ifturn = ins.ifTurn(ins.getSlope(w1_n1, w1_n2), ins.getSlope(w2_n1, w2_n2));
 					
-					if(ifturn && Math.abs(speed_diff) > 60) {
+					if(ifturn && Math.abs(speed_gap) > 60) {
 						count_speed++;
 					}
 					
 				}
-				//如果第一条路的结束node和第二条路的结束node一样
+				
 				if(w1_end.equals(w2_end)) {
-					speed_diff = ways.get(i).maxspeed - ways.get(j).maxspeed;
+					speed_gap = ways.get(i).maxspeed - ways.get(j).maxspeed;
 					
 					Node w1_n1 = ins.getNode(w1_end);
 					Node w1_n2;
@@ -180,7 +190,7 @@ public class HandleWay {
 			
 					boolean ifturn = ins.ifTurn(ins.getSlope(w1_n1, w1_n2), ins.getSlope(w2_n1, w2_n2));
 					
-					if(ifturn && Math.abs(speed_diff) > 60) {
+					if(ifturn && Math.abs(speed_gap) > 60) {
 						count_speed++;
 					}
 					
