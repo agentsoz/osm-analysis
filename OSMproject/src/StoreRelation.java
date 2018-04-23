@@ -7,6 +7,7 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+@Deprecated
 public class StoreRelation implements InsertData {
 
 	private static StoreRelation instance;

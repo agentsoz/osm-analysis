@@ -9,6 +9,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+@Deprecated
 public class StoreWay implements InsertData {
 	
 	private static StoreWay instance;
@@ -31,37 +32,12 @@ public class StoreWay implements InsertData {
 			Element root = document.getRootElement();
 			List<Element> list = root.elements();
 			String replace;
+			int count = 0;
 			for(Element e:list) {
 				replace = e.attributeValue("user");
-				if(replace.contains("'")) {
-					replace = replace.replace("'", "''");
-				}
-				String basic = "INSERT INTO ways VALUES('"+Integer.parseInt(e.attributeValue("id"))+"',"
-						+ "'"+e.attributeValue("version")+"',"
-						+ "'"+e.attributeValue("timestamp")+"',"
-						+ "'"+e.attributeValue("uid")+"',"
-						+ "'"+replace+"',"
-						+ "'"+e.attributeValue("changeset")+"')";
-				stm.executeUpdate(basic);
-				
-				List<Element> cList = e.elements();
-				for(Element c:cList) {
-					if(c.getName().equals("nd")) {
-						String node = "INSERT INTO ways_nodes VALUES('"+e.attributeValue("id")+"',"
-								+ "'"+c.attributeValue("ref")+"')";
-						stm.executeUpdate(node);
-					}else if(c.getName().equals("tag")){
-						replace = c.attributeValue("v");
-						if(replace.contains("'")) {
-							replace = replace.replace("'", "''");
-						}
-						String tag = "INSERT INTO ways_tags VALUES('"+e.attributeValue("id")+"',"
-								+ "'"+c.attributeValue("k") + "-" + replace+"')";
-						stm.executeUpdate(tag);
-					}
-
-				}
+				count++;
 			}
+			System.out.println(count);
 			con.commit();
 			
 		} catch (SQLException e) {

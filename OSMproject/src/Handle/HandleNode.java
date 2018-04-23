@@ -19,11 +19,11 @@ public class HandleNode {
 		return instance;
 	}
 	
-	
+	@Deprecated
 	public double getSlope(Node node1, Node node2) {
 		return (node1.lat - node2.lat)/(node1.lon - node2.lon);
 	}
-	
+	@Deprecated
 	public boolean ifTurn(double k1, double k2) {
 		double tan = k1-k2/1+k1*k2;
 		if(tan > 0) {
