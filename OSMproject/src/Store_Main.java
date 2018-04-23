@@ -20,18 +20,12 @@ public class Store_Main {
 			stm = con.createStatement();
 			con.setAutoCommit(false);
 			
-			createTable(stm, con);
+			createBasicTable(stm, con);
+			createProblemTable(stm, con);
 			
-			insert = StoreWay.getInstance();
+			insert = Store.getInstance();
 			insert.insert(stm, con);
-			LOG.info("insert into ways successfully");
-			insert = StoreRelation.getInstance();
-			insert.insert(stm, con);
-			LOG.info("insert into relations successfully");
-			insert = StoreNode.getInstance();
-			insert.insert(stm, con);
-			LOG.info("insert into nodes successfully");
-			
+		//	StoreWay.getInstance().insert(stm, con);
 			con.setAutoCommit(true);
 			stm.close();
 			con.close();
@@ -47,15 +41,25 @@ public class Store_Main {
 	
 	}
 	
-	private static void createTable(Statement stm, Connection con) {
+	private static void createProblemTable(Statement stm, Connection con) throws SQLException {
+		// TODO Auto-generated method stub
+		String maxspeed = "CREATE TABLE maxspeed(ID_FIRST INT NOT NULL, ID_SECOND INT NOT NULL)";
 
+		stm.executeUpdate(maxspeed);
+		
+	}
+
+	private static void createBasicTable(Statement stm, Connection con) throws SQLException {
+
+		
+		
 		String ways = "CREATE TABLE ways(ID INT PRIMARY KEY NOT NULL,"
 				+ "version TEXT,"
 				+ "timestamp TEXT,"
 				+ "uid TEXT,"
 				+ "user TEXT,"
 				+ "changeset TEXT)";
-		String ways_tags = "CREATE TABLE ways_tags(way_id TEXT,tag TEXT)";
+		String ways_tags = "CREATE TABLE ways_tags(way_id TEXT, tag_key TEXT, tag_value TEXT)";
 		String ways_nodes = "CREATE TABLE ways_nodes(way_id TEXT,node_id TEXT)";
 		String relations = "CREATE TABLE relations(ID INT PRIMARY KEY NOT NULL,"
 				+ "version INT,"
@@ -63,7 +67,7 @@ public class Store_Main {
 				+ "uid INT,"
 				+ "user TEXT,"
 				+ "changeset INT)"; 
-		String relations_tags = "CREATE TABLE relations_tags(relation_id INT, tag TEXT)";
+		String relations_tags = "CREATE TABLE relations_tags(relation_id INT, tag_key TEXT, tag_value TEXT)";
 		String relations_members = "CREATE TABLE relations_members(relation_id INT,"
 				+ "member_type TEXT,"
 				+ "member_ref TEXT,"
@@ -77,7 +81,7 @@ public class Store_Main {
 				+ "lat TEXT,"
 				+ "lon TEXT)";
 		String nodes_tags = "CREATE TABLE nodes_tags(nodes_id INT, tag_key TEXT, tag_value TEXT)";
-		try {
+
 			stm.executeUpdate(ways);
 			stm.executeUpdate(ways_nodes);
 			stm.executeUpdate(ways_tags);
@@ -87,10 +91,6 @@ public class Store_Main {
 			stm.executeUpdate(nodes_tags);
 			stm.executeUpdate(nodes);
 			con.commit();
-		} catch (SQLException x) {
-			// TODO Auto-generated catch block
-			x.printStackTrace();
-		}
 	}
 	
 }
