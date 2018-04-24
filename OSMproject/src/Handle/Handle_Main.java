@@ -1,15 +1,14 @@
 package Handle;
 
-import java.io.File;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 public class Handle_Main {
 	
@@ -31,54 +30,74 @@ public class Handle_Main {
 		}
 		*/
 		getWays();
-		MaxSpeedGapProblem.getInstance().inCorrectMaxSpeed(ways, 60);
+	//	MaxSpeedGapProblem.getInstance().inCorrectMaxSpeed(ways, 60);
 		
 	}
 	
 	public static void getWays() {
 		
 		int count_maxspeed = 0;
-		int count_streetNameNull = 0;
 		ways = new ArrayList<>();
-		Way way;
 		
-		SAXReader reader = new SAXReader();
-		try {	
-			Document document = reader.read(new File("src/res/way.xml"));
-			Element root = document.getRootElement();
-			List<Element> list = root.elements();
+		Connection con;
+		Statement stm;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			con = DriverManager.getConnection("jdbc:sqlite:osm.db");
+			stm = con.createStatement();
+			con.setAutoCommit(false);
 			
-			for(Element e:list) {
-
+			String sql = "SELECT ID FROM ways";
+			ResultSet res = stm.executeQuery(sql);
+			ResultSet res_t;
+			String tags;
+			String nodes;
+			Way way;
+			String wayID;
+			while(res.next()) {
 				way = new Way();
-				way.id = Integer.parseInt(e.attributeValue("id"));
-				List<Element> cList = e.elements();
-				for(Element c:cList) {
-					if(c.getName().equals("nd")) {
-						way.nodes_ref.add(c.attributeValue("ref"));
-						
-					}else if(c.getName().equals("tag")) {
-						if(c.attributeValue("k").equals("maxspeed")) {
-							count_maxspeed++;
-							way.maxspeed = Integer.parseInt(c.attributeValue("v"));
-						}else if(c.attributeValue("k").equals("name")) {
-							
-							way.name = c.attributeValue("v");
-						}else if(c.attributeValue("k").equals("oneway")) {
-							way.oneWay = c.attributeValue("v");
-						}else if(c.attributeValue("k").equals("lanes")) {
-							way.lanes = c.attributeValue("v");
-						}
+				wayID = res.getString("ID");
+				way.id = Integer.parseInt(wayID);
+				tags = "SELECT * FROM ways_tags WHERE way_id='"+wayID+"'";
+				res_t = stm.executeQuery(tags);
+				while(res_t.next()) {
+					if(res_t.getString("tag_key").equals("maxspeed")) {
+						way.maxspeed = Integer.parseInt(res_t.getString("tag_value"));
+						count_maxspeed++;
+					}
+					if(res_t.getString("tag_key").equals("name")) {
+						way.name = res_t.getString("tag_value");
+					}
+					if(res_t.getString("tag_key").equals("oneway")) {
+						way.oneWay = res_t.getString("tag_value");
+					}
+					if(res_t.getString("tag_key").equals("lanes")) {
+						way.lanes = res_t.getString("tag_value");
 					}
 				}
+				
+				nodes = "SELECT * FROM ways_nodes WHERE way_id='"+wayID+"'";
+				res_t = stm.executeQuery(nodes);
+				while(res_t.next()) {
+					way.nodes_ref.add(res_t.getString("node_id"));
+				}
 				ways.add(way);
+				
 			}
-		} catch (DocumentException e) {
+			res.close();
+			stm.close();
+			con.close();
+		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.log(Level.SEVERE, "class not found");
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			LOG.log(Level.SEVERE, "sql problem");
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}finally {
 			LOG.log(Level.INFO, "how many ways in this area: " + ways.size());
-			LOG.log(Level.INFO, "how many streets don't have name: " + count_streetNameNull);
 			LOG.log(Level.INFO, "how many ways have max speed: " + count_maxspeed);
 		}
 	}
