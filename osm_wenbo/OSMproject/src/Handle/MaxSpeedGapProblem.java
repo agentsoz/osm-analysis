@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import model.Node;
+import model.Way;
+
 public class MaxSpeedGapProblem {
 	
 	static final Logger LOG = Logger.getLogger(MaxSpeedGapProblem.class.getName());
