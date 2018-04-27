@@ -7,6 +7,10 @@ public class Relation {
 	
 	public int id;
 	
+	public int maxspeed;
+	
+	public String route;
+	
 	public List<Member> members;
 	
 	public Relation() {

@@ -9,6 +9,7 @@ public class Way extends Member {
 	public int id;
 	public int maxspeed;
 	public String name;
+	public String route;
 	//tag how many marked traffic lanes there are on a highway
 	public String lanes;
 	public String oneWay;
