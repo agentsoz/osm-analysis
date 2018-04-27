@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import Model.Node;
+import Model.Way;
+
 public class MaxSpeedGapProblem {
 	
 	static final Logger LOG = Logger.getLogger(MaxSpeedGapProblem.class.getName());
@@ -17,6 +20,9 @@ public class MaxSpeedGapProblem {
 	private int count_speed = 0;
 	
 	int gap;
+	
+	Connection con = null;
+	Statement stm = null;
 	
 	private static MaxSpeedGapProblem instance = new MaxSpeedGapProblem();
 	
@@ -81,6 +87,7 @@ public class MaxSpeedGapProblem {
 			}
 		}
 		LOG.log(Level.INFO, " speed gap between two ways which is more than 60: " + count_speed);
+		
 	}
 
 	private boolean judge(Node w1_n1, Node w1_n2, Node w2_n1, Node w2_n2, int speed_gap) {
@@ -140,29 +147,31 @@ public class MaxSpeedGapProblem {
 			int id_i = ways.get(i).id;
 			int id_j = ways.get(j).id;
 			
-			Connection con = null;
-			Statement stm = null;
-			
-			try {
+			storeInSQLITE(id_i, id_j);
+		}
+	}
+	
+	private void storeInSQLITE(int id_i, int id_j) {
+
+		try {
+			if(con == null && stm == null) {
 				Class.forName("org.sqlite.JDBC");
 				con = DriverManager.getConnection("jdbc:sqlite:osm.db");
 				stm = con.createStatement();
-				con.setAutoCommit(false);
-				String add = "INSERT INTO maxspeed VALUES('"+id_i+"',"
-							+ "'"+id_j+"')";
-			//	stm.executeQuery(add);
-			//	stm.executeUpdate(add);
-			//	con.commit();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				con.setAutoCommit(false);	
 			}
-			LOG.log(Level.INFO, "way(" + id_i + ") and way(" + id_j + ") have max speed problem");
-			count_speed++;
+			
+			String add = "INSERT INTO maxspeed VALUES('"+id_i+"','"+id_j+"')";
+			stm.executeUpdate(add);
+			con.commit();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
+		LOG.log(Level.INFO, "way(" + id_i + ") and way(" + id_j + ") have max speed problem");
+		count_speed++;
 	}
 }

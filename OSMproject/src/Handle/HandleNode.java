@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Model.Node;
+
 public class HandleNode {
 
 	static HandleNode instance;
