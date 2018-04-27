@@ -47,7 +47,13 @@ public class Handle {
 				sql_tag = "SELECT * FROM relations_tags WHERE relation_id='"+res.getString("ID")+"'";
 				res_t = stm.executeQuery(sql_tag);
 				while(res_t.next()) {
-					//read tag from database
+					//TODO add tag from database to list when need it
+					if(res_t.getString("tag_key").equals("maxspeed")) {
+						relation.maxspeed = Integer.parseInt(res_t.getString("tag_value"));
+					}
+					if(res_t.getString("tag_key").equals("route")) {
+						relation.route = res_t.getString("tag_value");
+					}
 				}
 				sql_member = "SELECT * FROM relations_members WHERE relation_id='"+res.getString("ID")+"'";
 				res_t = stm.executeQuery(sql_member);
@@ -56,11 +62,13 @@ public class Handle {
 					if(res_t.getString("member_type").equals("way")) {
 						Member way = getOneWay(res_t.getString("member_ref"));
 						way.role = res_t.getString("member_role");
+						relation.members.add(way);
 					}
 					
 					if(res_t.getString("member_type").equals("ndoe")) {
 						Member node = getOneNode(res_t.getString("member_ref"));
 						node.role = res_t.getString("member_role");
+						relation.members.add(node);
 					}
 				
 				}
@@ -94,6 +102,7 @@ public class Handle {
 				tags = "SELECT * FROM ways_tags WHERE way_id='"+wayID+"'";
 				res_t = stm.executeQuery(tags);
 				while(res_t.next()) {
+					//TODO add tag from database to list when need it
 					if(res_t.getString("tag_key").equals("maxspeed")) {
 						way.maxspeed = Integer.parseInt(res_t.getString("tag_value"));
 						count_maxspeed++;
@@ -106,6 +115,9 @@ public class Handle {
 					}
 					if(res_t.getString("tag_key").equals("lanes")) {
 						way.lanes = res_t.getString("tag_value");
+					}
+					if(res_t.getString("tag_key").equals("route")) {
+						way.route = res_t.getString("tag_value");
 					}
 				}
 				
@@ -136,5 +148,7 @@ public class Handle {
 		
 	}
 	
-	public Node getOneNode(String id) {}
+	public Node getOneNode(String id) {
+		
+	}
 }
