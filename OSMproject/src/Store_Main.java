@@ -9,8 +9,7 @@ public class Store_Main {
 	static final Logger LOG = Logger.getLogger(Store_Main.class.getName());
 	
 	public static void main(String args[]) {
-		
-		InsertData insert;	
+
 		Connection con = null;
 		Statement stm = null;
 		
@@ -19,13 +18,7 @@ public class Store_Main {
 			con = DriverManager.getConnection("jdbc:sqlite:osm.db");
 			stm = con.createStatement();
 			con.setAutoCommit(false);
-			
-			createBasicTable(stm, con);
-			createProblemTable(stm, con);
-			
-			insert = Store.getInstance();
-			insert.insert(stm, con);
-		//	StoreWay.getInstance().insert(stm, con);
+
 			con.setAutoCommit(true);
 			stm.close();
 			con.close();
@@ -44,8 +37,12 @@ public class Store_Main {
 	private static void createProblemTable(Statement stm, Connection con) throws SQLException {
 		// TODO Auto-generated method stub
 		String maxspeed = "CREATE TABLE maxspeed(ID_FIRST INT NOT NULL, ID_SECOND INT NOT NULL)";
-
+		String maxspeedRW = "CREATE TABLE maxspeed(relation_id TEXT NOT NULL, way_id TEXT NOT NULL)";
+		String routeRW = "CREATE TABLE routeRW(relation_id TEXT NOT NULL, way_id TEXT NOT NULL)";
+		
+		stm.executeUpdate(routeRW);
 		stm.executeUpdate(maxspeed);
+		stm.executeUpdate(maxspeedRW);
 		
 	}
 
@@ -92,5 +89,5 @@ public class Store_Main {
 			stm.executeUpdate(nodes);
 			con.commit();
 	}
-	
+
 }
