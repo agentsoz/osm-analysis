@@ -3,7 +3,7 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Relation {
+public class Relation extends Member {
 	
 	public int id;
 	
