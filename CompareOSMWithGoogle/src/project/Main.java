@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.sql.*;
 
 import model.Waypoints;
-
 public class Main {
 
 

@@ -1,6 +1,6 @@
 
 package project;
-
+import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 import java.util.Scanner;
 
 import org.json.*;
-
 public class WaypointsHandler {
 
 	
