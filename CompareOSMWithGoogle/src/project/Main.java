@@ -10,7 +10,6 @@ public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
 		// TODO Auto-generated method stub
-		
 		WaypointsHandler wh = new WaypointsHandler();
 		int number = Integer.parseInt(args[0]);
 		double diff = Double.parseDouble(args[1]);
