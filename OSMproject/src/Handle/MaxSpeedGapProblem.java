@@ -11,11 +11,9 @@ import java.util.logging.Logger;
 import Model.Node;
 import Model.Way;
 
-public class MaxSpeedGapProblem {
+public class MaxSpeedGapProblem extends Problem{
 	
 	static final Logger LOG = Logger.getLogger(MaxSpeedGapProblem.class.getName());
-	
-	static HandleNode ins;
 	
 	private int count_speed = 0;
 	
@@ -23,13 +21,7 @@ public class MaxSpeedGapProblem {
 	
 	Connection con = null;
 	Statement stm = null;
-	
-	private static MaxSpeedGapProblem instance = new MaxSpeedGapProblem();
-	
-	public static MaxSpeedGapProblem getInstance() {
-		return instance;
-	}
-	
+
 	/*
 	 * check if there are any incorrect max speed problem between two connected ways which have same street name
 	 * firstly, compare two ways by two "for" loop to get every two connected way, way 'i' and way 'j', for example
@@ -40,10 +32,9 @@ public class MaxSpeedGapProblem {
 	 * 4. i.endNode == j.endNode
 	 * secondly, judge speed_gap = i.maxspeed - j.maxspeed
 	 * */
-	public void inCorrectMaxSpeed(List<Way> ways, int set_gap) {
+	public void handle(List<Way> ways, int set_gap) {
 		// TODO Auto-generated method stub
 		
-		ins = HandleNode.getInstance();
 		gap = set_gap;
 		
 		int w1_node_size;
@@ -92,7 +83,6 @@ public class MaxSpeedGapProblem {
 
 	private boolean judge(Node w1_n1, Node w1_n2, Node w2_n1, Node w2_n2, int speed_gap) {
 		// TODO Auto-generated method stub
-	//	boolean ifturn = ins.ifTurn(ins.getSlope(w1_n1, w1_n2), ins.getSlope(w2_n1, w2_n2));
 		
 		if(Math.abs(speed_gap) >= gap) {
 			return true;
@@ -113,33 +103,33 @@ public class MaxSpeedGapProblem {
 		int w1_node_size = ways.get(i).nodes_ref.size();
 		
 		if(w1_node.equals(ways.get(i).nodes_ref.get(0))) {
-			w1_n1 = ins.getNode(w1_node);
-			w1_n2 = ins.getNode(ways.get(i).nodes_ref.get(1));
-			w2_n1 = ins.getNode(w2_node);
+			w1_n1 = getNode(w1_node);
+			w1_n2 = getNode(ways.get(i).nodes_ref.get(1));
+			w2_n1 = getNode(w2_node);
 			if(w2_node.equals(ways.get(j).nodes_ref.get(0))) { 
-				 w2_n2 = ins.getNode(ways.get(j).nodes_ref.get(1));
+				 w2_n2 = getNode(ways.get(j).nodes_ref.get(1));
 			}else {
 				if(w2_node_size == 2) {
-					w2_n2 = ins.getNode(ways.get(j).nodes_ref.get(0));
+					w2_n2 = getNode(ways.get(j).nodes_ref.get(0));
 				}else {
-					w2_n2 = ins.getNode(ways.get(j).nodes_ref.get(w2_node_size-2));
+					w2_n2 = getNode(ways.get(j).nodes_ref.get(w2_node_size-2));
 				}
 			}
 		}else {
-			w1_n1 = ins.getNode(w1_node);
+			w1_n1 = getNode(w1_node);
 			if(w1_node_size == 2) {
-				w1_n2 = ins.getNode(ways.get(i).nodes_ref.get(0));
+				w1_n2 = getNode(ways.get(i).nodes_ref.get(0));
 			}else {
-				w1_n2 = ins.getNode(ways.get(i).nodes_ref.get(w1_node_size-2));
+				w1_n2 = getNode(ways.get(i).nodes_ref.get(w1_node_size-2));
 			}
-			w2_n1 = ins.getNode(w2_node);
+			w2_n1 = getNode(w2_node);
 			if(w2_node.equals(ways.get(j).nodes_ref.get(0))) {
-				w2_n2 = ins.getNode(ways.get(j).nodes_ref.get(1));
+				w2_n2 = getNode(ways.get(j).nodes_ref.get(1));
 			}else {
 				if(w2_node_size == 2) {
-					w2_n2 = ins.getNode(ways.get(j).nodes_ref.get(0));
+					w2_n2 = getNode(ways.get(j).nodes_ref.get(0));
 				}else {
-					w2_n2 = ins.getNode(ways.get(j).nodes_ref.get(w2_node_size-2));
+					w2_n2 = getNode(ways.get(j).nodes_ref.get(w2_node_size-2));
 				}
 			}
 		}
@@ -173,5 +163,9 @@ public class MaxSpeedGapProblem {
 		}
 		LOG.log(Level.INFO, "way(" + id_i + ") and way(" + id_j + ") have max speed problem");
 		count_speed++;
+	}
+	
+	private Node getNode(String id) {
+		return DataHandle.getInstance().getOneNode(id);
 	}
 }
