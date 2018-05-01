@@ -9,9 +9,8 @@ import java.util.List;
 
 import org.junit.*;
 
-import Handle.Handle_Main;
-import model.Relation;
-import model.Way;
+import models.Relation;
+import models.Way;
 
 
 /**
@@ -23,7 +22,7 @@ import model.Way;
  * */
 public class MyTests {
 
-	Handle_Main tester;
+	
 	static Connection conn = null;
 	
 	@BeforeClass
