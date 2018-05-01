@@ -55,7 +55,6 @@ public class DataHandle {
 			stm = con.createStatement();
 			stm1 = con.createStatement();
 			stm2 = con.createStatement();
-			con.setAutoCommit(false);
 			
 			getWay_Begin = System.currentTimeMillis();
 			getWays();
@@ -116,7 +115,7 @@ public class DataHandle {
 	private void getTagInWay(Way way, String wayID) throws SQLException {
 		String tags = "SELECT tag_key,tag_value FROM ways_tags WHERE way_id='"+wayID+"'";
 		ResultSet res_t = stm1.executeQuery(tags);
-		//遍历每个way中的tags
+
 		while(res_t.next()) {
 			//TODO add tag from database to list when need it
 			if(res_t.getString("tag_key").equals("maxspeed")) {
