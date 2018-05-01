@@ -74,6 +74,7 @@ public class Main {
 			con.setAutoCommit(false);
 			
 			createBasicTable(stm, con);
+			DataBaseHandler.getInstance().insert(stm,con);
 			createProblemTable(stm, con);
 
 			con.setAutoCommit(true);
