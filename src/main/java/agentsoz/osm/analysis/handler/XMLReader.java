@@ -1,4 +1,4 @@
-package handler;
+package agentsoz.osm.analysis.handler;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package models;
+package agentsoz.osm.analysis.models;
 
 public class Relation {
 

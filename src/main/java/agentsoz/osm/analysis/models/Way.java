@@ -1,4 +1,4 @@
-package models;
+package agentsoz.osm.analysis.models;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

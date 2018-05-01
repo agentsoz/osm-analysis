@@ -1,4 +1,4 @@
-package interfaces;
+package agentsoz.osm.analysis.interfaces;
 import java.sql.Connection;
 import java.sql.Statement;
 

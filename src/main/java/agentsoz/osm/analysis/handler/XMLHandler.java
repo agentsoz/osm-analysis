@@ -1,10 +1,10 @@
-package handler;
+package agentsoz.osm.analysis.handler;
 
 import java.util.*;
+
+import agentsoz.osm.analysis.models.Way;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-
-import models.Way;
 
 /**
  * startDocument() and endDocument() defines what application does at the start and the end of document

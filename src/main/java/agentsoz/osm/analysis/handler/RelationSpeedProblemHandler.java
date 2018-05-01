@@ -1,4 +1,4 @@
-package handler;
+package agentsoz.osm.analysis.handler;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Relation;
-import models.Way;
+import agentsoz.osm.analysis.models.Relation;
+import agentsoz.osm.analysis.models.Way;
 
 public class RelationSpeedProblemHandler extends BasicProblemHandler{
 

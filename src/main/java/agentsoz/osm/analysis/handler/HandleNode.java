@@ -1,4 +1,4 @@
-package handler;
+package agentsoz.osm.analysis.handler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import models.Node;
+import agentsoz.osm.analysis.models.Node;
 
 public class HandleNode {
 

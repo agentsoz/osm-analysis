@@ -1,4 +1,4 @@
-package handler;
+package agentsoz.osm.analysis.handler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import models.*;
+import agentsoz.osm.analysis.models.*;
+import agentsoz.osm.analysis.models.Node;
+import agentsoz.osm.analysis.models.Relation;
+import agentsoz.osm.analysis.models.Way;
 
 public class DataHandler {
 	

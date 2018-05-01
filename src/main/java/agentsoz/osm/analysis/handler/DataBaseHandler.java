@@ -1,4 +1,4 @@
-package handler;
+package agentsoz.osm.analysis.handler;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,8 +6,8 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.Statement;
 
-import app.Main;
-import interfaces.InsertData;
+import agentsoz.osm.analysis.app.Main;
+import agentsoz.osm.analysis.interfaces.InsertData;
 
 public class DataBaseHandler implements InsertData {
 	

@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.junit.*;
 
-import models.Relation;
-import models.Way;
+import agentsoz.osm.analysis.app.models.Relation;
+import agentsoz.osm.analysis.app.models.Way;
 
 
 /**

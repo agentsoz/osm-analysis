@@ -1,4 +1,4 @@
-package app;
+package agentsoz.osm.analysis.app;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.logging.Logger;
-import handler.*;
+import agentsoz.osm.analysis.handler.*;
+import agentsoz.osm.analysis.handler.*;
 
 public class Main {
 	
@@ -32,7 +33,7 @@ public class Main {
 			{
 				int speed = Integer.valueOf(args[i+1]);
 				String pathDb = args[i+2];
-				getWaysHandler gwh = new  getWaysHandler(pathDb); 				
+				getWaysHandler gwh = new  getWaysHandler(pathDb);
 				MaxSpeedGapProblemHandler msp = new MaxSpeedGapProblemHandler(gwh.getWaysFromTableWays(), speed);
 				msp.handleProblem();
 			}
