@@ -9,7 +9,7 @@ public class Way extends Member {
 	public int id;
 	public int maxspeed;
 	public String name;
-	public String route;
+	public String bicycle;
 	//tag how many marked traffic lanes there are on a highway
 	public String lanes;
 	public String oneWay;
@@ -19,6 +19,7 @@ public class Way extends Member {
 		name = new String();
 		lanes = new String();
 		oneWay = new String();
+		id = 0;
 	}
 	
 }
