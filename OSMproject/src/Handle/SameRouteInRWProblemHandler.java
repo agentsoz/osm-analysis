@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SameRouteInRWProblem extends Problem {
+public class SameRouteInRWProblemHandler extends BasicProblemHandler {
 	
 	private int count = 0;
 	
-	static final Logger LOG = Logger.getLogger(SameRouteInRWProblem.class.getName());
+	static final Logger LOG = Logger.getLogger(SameRouteInRWProblemHandler.class.getName());
 	
 	private List<Integer> issuedways;
 	
@@ -22,7 +22,9 @@ public class SameRouteInRWProblem extends Problem {
 	Statement stm;
 	Statement stm1;
 	Statement stm2;
-	public void handle() {
+	
+	@Override
+	public void handleProblem() {
 
 		issuedways = new ArrayList<>();
 		
