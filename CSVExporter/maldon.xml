@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<osm version="0.6" generator="CGImap 0.6.0 (22513 thorn-02.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
-<node id="36422054" visible="true" version="10" changeset="6468338" timestamp="2010-11-27T10:39:05Z" user="Neil Penman" uid="84937" lat="-36.9963144" lon="144.0689457">
-<tag k="is_in" v="Victoria, Australia"/>
-<tag k="name" v="Maldon"/>
-<tag k="place" v="town"/></node>
-</osm>
