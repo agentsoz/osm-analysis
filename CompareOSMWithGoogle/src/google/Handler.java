@@ -10,6 +10,21 @@ import org.json.JSONObject;
 
 public class Handler {
 
+	public static void getStreetName(String lat1, String lon1, String lat2, String lon2) throws Exception{
+		String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
+		String request = "https://maps.googleapis.com/maps/api/directions/json?origin="+lat1+","+lon1+"&destination="+lat2+","+lon2+"&key="+key;
+		URL url = new URL(request);
+		
+			Scanner scan = new Scanner(url.openStream());
+	        String str = new String();
+	        while(scan.hasNext())
+	        	str += scan.nextLine();
+	        scan.close();
+	        JSONObject obj = new JSONObject(str);
+	        JSONObject duration = obj.getJSONArray("routes").getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONObject("duration");
+	       
+		
+	}
 	
 	
 	public void createTable() throws ClassNotFoundException, SQLException{
@@ -107,7 +122,7 @@ public class Handler {
 		} catch(Exception e){ 
 			return null;
 		}
-}
+	}
      
 	public int sendRequestToGraphhopper(String lat1, String lon1, String lat2, String lon2) throws IOException{
 		

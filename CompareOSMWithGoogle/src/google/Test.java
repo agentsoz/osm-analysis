@@ -12,8 +12,8 @@ public class Test {
 
 	public static void main(String[] args) throws IOException {
 		
-//		printTable();
-		printJSON();
+		printTable();
+//		printJSON();
 	}		
 
 public static void printTable(){	
@@ -44,7 +44,7 @@ public static void printTable(){
 public static void printJSON() throws IOException{
 	String graphkey = "7bf24aff-c48e-469f-a680-3d6fbe65388e";
 	String openroutekey = "58d904a497c67e00015b45fccdf4078addb04c539c260648be859a7c";
-	String graphhopperRequest = "https://graphhopper.com/api/1/route?point=-36.6735138,147.3741657&point=-34.3311298,148.7039834&points_encoded=false&key=7bf24aff-c48e-469f-a680-3d6fbe65388e";
+	String graphhopperRequest = "https://graphhopper.com/api/1/route?point=-36.6735138,147.3741657&point=-34.3311298,148.7039834&key=7bf24aff-c48e-469f-a680-3d6fbe65388e";
 	String openRouteRequest = "https://api.openrouteservice.org/directions?api_key=58d904a497c67e00015b45fccdf4078addb04c539c260648be859a7c&coordinates=147.3741657,-36.6735138|148.7039834,-34.3311298&profile=driving-car&preference=fastest&format=json&units=m&geometry=true&geometry_format=geojson&geometry_simplify=&instructions=true&instructions_format=text&roundabout_exits=&attributes=&maneuvers=&radiuses=&bearings=&continue_straight=&elevation=&extra_info=&optimized=true";
 	URL url = new URL(graphhopperRequest);
 
