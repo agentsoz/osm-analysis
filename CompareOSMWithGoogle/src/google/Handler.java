@@ -2,7 +2,7 @@ package google;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.io.IOException;
-
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -10,18 +10,29 @@ import org.json.JSONObject;
 
 public class Handler {
 
-	public static void getStreetName(String lat1, String lon1, String lat2, String lon2) throws Exception{
+	public static void main(String args[]) throws Exception{
+		getStreetName(-37.170539,149.0752711,-35.5213982,144.0558473);
+	}
+	
+	// -37.170539     149.0752711    3892568016     -35.5213982    144.0558473   
+	public static void getStreetName(double lat1, double lon1, double lat2, double lon2) throws IOException{
+		// Google API key
 		String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
 		String request = "https://maps.googleapis.com/maps/api/directions/json?origin="+lat1+","+lon1+"&destination="+lat2+","+lon2+"&key="+key;
-		URL url = new URL(request);
 		
-			Scanner scan = new Scanner(url.openStream());
-	        String str = new String();
-	        while(scan.hasNext())
-	        	str += scan.nextLine();
-	        scan.close();
-	        JSONObject obj = new JSONObject(str);
-	        JSONObject duration = obj.getJSONArray("routes").getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONObject("duration");
+		URL url = new URL(request);
+		Scanner scan = new Scanner(url.openStream());
+	    
+		// Record response into a String
+		String str = new String();
+	    while(scan.hasNext())
+	        str += scan.nextLine();
+	    scan.close();
+	    
+	    // Extract stations from JSON file
+	    JSONObject obj = new JSONObject(str);
+	        
+	        //JSONObject duration = obj.getJSONArray("routes").getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONObject("duration");
 	       
 		
 	}
@@ -106,6 +117,7 @@ public class Handler {
 			return hr+" hours "+min+" mins";
 	}
 	
+	//https://maps.googleapis.com/maps/api/directions/json?origin=-37.170539,149.0752711&destination=-35.5213982,144.0558473&key=AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I
 	public String sendRequestToGoogle(String lat1, String lon1, String lat2, String lon2) throws Exception{
 		String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
 		String request = "https://maps.googleapis.com/maps/api/directions/json?origin="+lat1+","+lon1+"&destination="+lat2+","+lon2+"&key="+key;
@@ -123,7 +135,7 @@ public class Handler {
 			return null;
 		}
 	}
-     
+     //https://graphhopper.com/api/1/route?point=-37.170539,149.0752711&point=-35.5213982,144.0558473&points_encoded=true&key=7bf24aff-c48e-469f-a680-3d6fbe65388e
 	public int sendRequestToGraphhopper(String lat1, String lon1, String lat2, String lon2) throws IOException{
 		
 		String key = "7bf24aff-c48e-469f-a680-3d6fbe65388e";

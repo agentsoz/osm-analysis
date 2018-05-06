@@ -11,11 +11,15 @@ import org.json.JSONObject;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
-		
-		printTable();
+		oneRoute();
+//		printTable();
 //		printJSON();
 	}		
 
+	public static void oneRoute(){
+		Sender.genRoute();
+	}
+	
 public static void printTable(){	
 		String url = "jdbc:sqlite:routing.db";
 		

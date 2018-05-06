@@ -16,18 +16,20 @@ public class WaypointsHandler {
 		
 	}
 	
-	public Waypoints generateWaypoints() throws ClassNotFoundException, SQLException, IOException{
+
+	
+	public Route generateWaypoints() throws ClassNotFoundException, SQLException, IOException{
 		while(true){
 			try{
-				Node origin = this.randomNode();
-				Node destination = this.randomNode();
-				Waypoints waypoints = this.requestOSMGeocodedFalse(origin, destination);
-				int actualTime = this.waypointsDuration(this.requestGoogleWaypoints(waypoints));
-				waypoints.actualTime = actualTime;
-				DecimalFormat df = new DecimalFormat("0.000");
-				waypoints.timeDiff = Double.parseDouble(df.format(Math.abs((waypoints.actualTime - waypoints.assumedTime)/(double)waypoints.assumedTime)));
+				Node origin = ranNode();
+				Node destination = ranNode();
+				Route route = requestOSMGeocodedFalse(origin, destination);
+				int actualTime = waypointsDuration(requestGoogleWaypoints(route));
+				route.gTime = actualTime;
+				DecimalFormat df = new DecimalFormat("0.0000");
+				route.timeDif = Double.parseDouble(df.format(Math.abs((route.gTime - route.oTime)/(double)route.oTime)));
 				
-				return waypoints;
+				return route;
 			}catch (IOException e){
 				continue;
 			}
@@ -36,7 +38,7 @@ public class WaypointsHandler {
 	
 	// Get a random Node.
 	// Question: Do we pick nodes TOTALLY randomly? Region / distance restriction.
-	public Node randomNode() throws ClassNotFoundException, SQLException{
+	public static Node ranNode() throws ClassNotFoundException, SQLException{
 		Class.forName("org.sqlite.JDBC");
 		Connection con = DriverManager.getConnection("jdbc:sqlite:osm.db");
 		ResultSet rs = con.createStatement().executeQuery("SELECT * FROM nodes ORDER BY RANDOM() LIMIT 1");
@@ -48,7 +50,7 @@ public class WaypointsHandler {
 
 	
 	//departure_time=1532959200 July 31st 2018
-	public Waypoints requestOSMGeocodedFalse(Node node1, Node node2) throws IOException{
+	public Route requestOSMGeocodedFalse(Node node1, Node node2) throws IOException{
 		String key = "7bf24aff-c48e-469f-a680-3d6fbe65388e";
 		String request = "https://graphhopper.com/api/1/route?point="+node1.lat+","+node1.lon+"&point="+node2.lat+","+node2.lon+"&points_encoded=false&key="+key;
 		
@@ -67,7 +69,7 @@ public class WaypointsHandler {
 		Double distance = json.getJSONArray("paths").getJSONObject(0).getDouble("distance");
 		int assumedTime = json.getJSONArray("paths").getJSONObject(0).getInt("time");
 		
-		Waypoints waypoints = new Waypoints(assumedTime,distance,node1,node2);
+		Route waypoints = new Route(node1,node2,assumedTime,distance);
 		JSONArray coordinates = json.getJSONArray("paths").getJSONObject(0).getJSONObject("points").getJSONArray("coordinates");
 		
 		// Evenly pick 20 nodes from hundreds of waypoints.
@@ -80,15 +82,12 @@ public class WaypointsHandler {
 			
 		}
 		return waypoints;
-			
-		
-        
 	}
 	
-	public String requestGoogleWaypoints(Waypoints waypoints) throws IOException{
+	public String requestGoogleWaypoints(Route waypoints) throws IOException{
 		
 		String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
-		String request = "https://maps.googleapis.com/maps/api/directions/json?origin="+waypoints.origin.lat+","+waypoints.origin.lon+"&destination="+waypoints.destination.lat+","+waypoints.destination.lon+"&waypoints=";
+		String request = "https://maps.googleapis.com/maps/api/directions/json?origin="+waypoints.orig.lat+","+waypoints.orig.lon+"&destination="+waypoints.dest.lat+","+waypoints.dest.lon+"&waypoints=";
 		
 		request += (waypoints.nodes.get(0).lat + "," + waypoints.nodes.get(0).lon);
 		
