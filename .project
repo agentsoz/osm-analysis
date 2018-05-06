@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
+<<<<<<< HEAD:.project
 	<name>osm-analysis</name>
+=======
+	<name>OSMProject-tianze-bogeng</name>
+>>>>>>> ab74dcf1a9ff19a18e11295c6d54982e28bfa3aa:CompareOSMWithGoogle/.project
 	<comment></comment>
 	<projects>
 	</projects>
