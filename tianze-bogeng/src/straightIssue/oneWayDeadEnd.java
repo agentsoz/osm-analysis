@@ -47,7 +47,7 @@ public class oneWayDeadEnd {
 					//distinct nodes number
 				}
 			}
-			System.out.println(ways.size() + " oneways are deadend.");
+			System.out.println(ways.size() + " oneways are deadend hahaha.");
 			
 		}catch(DocumentException e) {
 			// TODO Auto-generated catch block
