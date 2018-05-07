@@ -17,12 +17,6 @@ import agentsoz.osm.analysis.models.Way;
 
 public class DataHandler {
 	
-	// eclipse test only
-	public static void main(String args[]) 
-	{
-		DataHandler.getInstance().prepare();
-	}
-	
 	static final Logger LOG = Logger.getLogger(DataHandler.class.getName());
 	
 	private static DataHandler instance = new DataHandler();

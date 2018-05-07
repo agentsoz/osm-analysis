@@ -14,14 +14,7 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 
 	public String url;
 	Connection conn;
-	
-	// for eclipse test only
-	public static void main(String[] args) 
-	{
-		RelationSpeedProblemHandler rs = new RelationSpeedProblemHandler("osm.db");
-		rs.handleProblem();
-	}
-	
+		
 	public RelationSpeedProblemHandler(String databaseUrl)
 	{
 		url = "jdbc:sqlite:" + databaseUrl;

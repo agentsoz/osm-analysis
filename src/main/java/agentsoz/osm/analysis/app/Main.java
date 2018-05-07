@@ -7,66 +7,76 @@ import java.sql.Statement;
 
 import java.util.logging.Logger;
 import agentsoz.osm.analysis.handler.*;
-import agentsoz.osm.analysis.handler.*;
 
 public class Main {
 	
 	static final Logger LOG = Logger.getLogger(Main.class.getName());
 //	static String OSM_FILE = "C:\\Users\\Castiel\\Desktop\\osm_wenbo\\OSMproject\\mount_alexander_shire_network.osm";
 	public static String OSM_FILE;
+	static BasicProblemHandler handler;
 	
 	/**
 	 * Parse args[] here and set variables from commandline options
 	 * For instance, --way-file FILE could be used to set the var WAY_FILE to some
 	 * user specified value.
 	 * */
-	public static void parse(String[] args) 
+	public static int parse(String[] args) 
 	{
 		for(int i = 0; i < args.length-1; i++) 
 		{
 			if(args[i].equals("-file")) 
 			{
 				OSM_FILE = args[i+1];
-				createTables();
+				return 1;
 			}
-			if(args[i].equals("-maxspeedgapproblem")) 
+			else if(args[i].equals("-maxspeedgapproblem")) 
 			{
 				int speed = Integer.valueOf(args[i+1]);
-				String pathDb = args[i+2];
-				getWaysHandler gwh = new  getWaysHandler(pathDb);
-				MaxSpeedGapProblemHandler msp = new MaxSpeedGapProblemHandler(gwh.getWaysFromTableWays(), speed);
-				msp.handleProblem();
+				String dbUrl = args[i+2];
+				
+				handler = new MaxSpeedGapProblemHandler(dbUrl, speed);
 			}
-			if(args[i].equals("-relationspeedproblem"))
+			else if(args[i].equals("-relationspeedproblem"))
 			{
 				String dbUrl = args[i+1];
-				RelationSpeedProblemHandler handler = new RelationSpeedProblemHandler(dbUrl);
-				handler.handleProblem();
+				handler = new RelationSpeedProblemHandler(dbUrl);
 			}
-			if(args[i].equals("-prepare"))
+//			if(args[i].equals("-prepare"))
+//			{
+//				DataHandler.getInstance().prepare();
+//			}
+			else if(args[i].equals("-sameRouteInRWProblem"))
 			{
-				DataHandler.getInstance().prepare();
-			}
-			if(args[i].equals("-sameRouteInRWProblem"))
-			{
-				SameRouteInRWProblemHandler handler = new SameRouteInRWProblemHandler();
-				handler.handleProblem();
+				String dbUrl = args[i+1];
+				handler = new SameRouteInRWProblemHandler(dbUrl);
 			}
 			
 		}
+		return 2;
 		
-	}
+	} 
 	
 	public static void main(String args[]) 
 	{
-		parse(args);
+		int ref_problem = parse(args);
+		
+		switch(ref_problem)
+		{
+			case 1: createTables();
+			        break;
+			
+			case 2: handler.handleProblem();
+			        break;
+		}
+	
+		
 	}
 	
 	public static void createTables() 
 	{
 		Connection con = null;	
 		Statement stm = null;
-		
+
 		try {
 			Class.forName("org.sqlite.JDBC");
 			con = DriverManager.getConnection("jdbc:sqlite:osm.db");

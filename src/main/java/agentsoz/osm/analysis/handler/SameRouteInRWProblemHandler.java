@@ -1,7 +1,6 @@
 package agentsoz.osm.analysis.handler;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,12 +15,18 @@ public class SameRouteInRWProblemHandler extends BasicProblemHandler {
 	
 	static final Logger LOG = Logger.getLogger(SameRouteInRWProblemHandler.class.getName());
 	
-	private List<Integer> issuedways;
+	private List<String> issuedways;
 	
+	private String url;
 	Connection con;
 	Statement stm;
 	Statement stm1;
 	Statement stm2;
+	
+	public SameRouteInRWProblemHandler(String databaseUrl)
+	{
+		url = "jdbc:sqlite:" + databaseUrl;
+	}
 	
 	@Override
 	public void handleProblem() {
@@ -31,20 +36,23 @@ public class SameRouteInRWProblemHandler extends BasicProblemHandler {
 		long begin = 0;
 		long end  = 0;
 		
-		try {
+		try 
+		{
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:osm.db");
+			con = super.connect(url);
 			stm = con.createStatement();
 			stm1 = con.createStatement();
 			stm2 = con.createStatement();
 			begin = System.currentTimeMillis();
 			getRouteInR();
 			end = System.currentTimeMillis();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (ClassNotFoundException e) 
+		{
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (SQLException e) 
+		{
 			e.printStackTrace();
 		}
 		
@@ -52,36 +60,49 @@ public class SameRouteInRWProblemHandler extends BasicProblemHandler {
 		LOG.log(Level.INFO, "the number that relation and its ways have different route: " + count);
 	}
 	
-	private void getRouteInR() throws SQLException {
+	private void getRouteInR() throws SQLException 
+	{
 		String sql = "SELECT relation_id,tag_value FROM relations_tags WHERE tag_key='route'";
 		ResultSet res = stm.executeQuery(sql);
-		while(res.next()) {
-			if(res.getString("tag_value").equals("bicycle")) {
-				getMemberInR(res.getInt("relation_id"));
+		
+		while(res.next()) 
+		{
+			if(res.getString("tag_value").equals("bicycle")) 
+			{
+				getMemberInR(res.getString("relation_id"));
 			}
 		}
 		res.close();
 		stm.close();
 	}
 	
-	private void getMemberInR(int relationID) throws SQLException {
+	private void getMemberInR(String relationID) throws SQLException 
+	{
 		String sql = "SELECT member_ref,member_type FROM relations_members WHERE relation_id='"+relationID+"'";
 		ResultSet res = stm1.executeQuery(sql);
-		while(res.next()) {
-			if(res.getString("member_type").equals("way")) {
-				getTagInWay(Integer.parseInt(res.getString("member_ref")));
+		
+		while(res.next()) 
+		{
+			if(res.getString("member_type").equals("way")) 
+			{
+				getTagInWay(res.getString("member_ref"));
 			}
 		}
 		res.close();
 		stm1.close();
 	}
 	
-	private void getTagInWay(int wayID) throws SQLException {
+	private void getTagInWay(String wayID) throws SQLException 
+	{
 		String sql = "SELECT tag_value,tag_key FROM ways_tags WHERE way_id='"+wayID+"'";
 		ResultSet res = stm2.executeQuery(sql);
-		while(res.next()) {
-			if(res.getString("tag_key").equals("bicycle")) {
-				if(res.getString("tag_value").equals("no")) {
+		
+		while(res.next()) 
+		{
+			if(res.getString("tag_key").equals("bicycle"))
+			{
+				if(res.getString("tag_value").equals("no"))
+				{
 					count++;
 					issuedways.add(wayID);
 				}
