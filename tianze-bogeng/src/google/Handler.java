@@ -4,14 +4,36 @@ import java.text.DecimalFormat;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import org.json.JSONObject;
 
+import model.Node;
+import model.Route;
 public class Handler {
 
-	public static void main(String args[]) throws Exception{
-		getStreetName(-37.170539,149.0752711,-35.5213982,144.0558473);
+	public void analyse(Route route) throws IOException{
+		Sender sender = new Sender();
+	
+		Iterator<Node> i1 = route.nodes.iterator();
+		Iterator<Node> i2 = route.nodes.iterator();
+		i2.next();
+		Route curr;
+		System.out.println("Difference of each part (m)");
+		Node node1;
+		Node node2;
+		
+		while(i2.hasNext()){
+			node1 = i1.next();
+			node2 = i2.next();
+			
+			curr = sender.genRoute(node1, node2);
+			
+			curr.format();
+			DecimalFormat df = new DecimalFormat("0.00");
+			System.out.println(df.format(Math.abs(curr.oDis - curr.gDis)));
+		}
 	}
 	
 	// -37.170539     149.0752711    3892568016     -35.5213982    144.0558473   

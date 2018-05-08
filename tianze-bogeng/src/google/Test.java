@@ -11,13 +11,19 @@ import org.json.JSONObject;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
-		oneRoute();
+		a();
 //		printTable();
 //		printJSON();
 	}		
 
-	public static void oneRoute(){
-		Sender.genRoute();
+	public static void a(){
+		Handler handler = new Handler();
+		Sender sender = new Sender();
+		try {
+			handler.analyse(sender.genRoute());
+		} catch (IOException e) {-
+			e.printStackTrace();
+		}
 	}
 	
 public static void printTable(){	

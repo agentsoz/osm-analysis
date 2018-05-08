@@ -21,39 +21,33 @@ public class Sender {
 
 	
 	
-	public static Route genRoute(){
+	public Route genRoute(){
 		while(true){
+			
 			Route route = null;
 			try {
-				route = goo_Wp(osm_Co(ranNode(),ranNode()));
-				int big;
-				// Store time diff
-				if(route.oTime > route.gTime)
-					big = route.oTime;
-				else
-					big = route.gTime;
-				DecimalFormat df = new DecimalFormat("0.0000");
-				route.timeDif = Double.parseDouble(df.format(Math.abs((route.gTime - route.oTime)/(double)big)));
-				
-				// Store distance diff
-				Double big2 ;
-				if(route.oDis > route.gDis)
-					big2 =  route.oDis;
-				
-				else
-					big2 = route.gDis;
-				
-				route.disDif = Double.parseDouble(df.format(Math.abs((route.gDis - route.oDis)/big2)));
-				
+//				route = goo_Wp(osm_Co(ranNode(),ranNode()));
+				Node node1 = new Node(); node1.lat = "-36.4333464";node1.lon ="148.6149967";
+				Node node2 = new Node(); node2.lat = "-37.1625186";node2.lon = "145.8704504";
+				route = goo(osm(node1,node2));
+				route.format();
 				return route;
-				
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
+			}
+//			catch (ClassNotFoundException | SQLException e) {
+//				e.printStackTrace();
+//			}
+			catch (Exception e) {
 				continue;
 			}
-			
 		}
+	}
+	
+	public Route genRoute(Node node1, Node node2) throws IOException{
+			Route route= goo(osm(node1,node2));
+			route.format();
+			
+			
+		return route;
 	}
 	
 	// Request advice: Departure_time=1532959200 July 31st 2018
@@ -61,15 +55,13 @@ public class Sender {
 	
 	// Store ori, dest, oTime, oDist into Route object and return the object.
 		
-	public static Route osm_Co(Node node1, Node node2) throws IOException{
+	public Route osm(Node node1, Node node2) throws IOException{
 			
 			String key = "7bf24aff-c48e-469f-a680-3d6fbe65388e";
 			String req = "https://graphhopper.com/api/1/route?point="+node1.lat+","+node1.lon+"&point="+node2.lat+","+node2.lon+"&points_encoded=false&key="+key;
 			
 			String res = readReq(req);
-			//*********//
-	        Utilities.writeOSM(res);;
-	        //*********//
+
 	        JSONObject json = new JSONObject(res);
 			Double oDist = json.getJSONArray("paths").getJSONObject(0).getDouble("distance");
 			int oTime = json.getJSONArray("paths").getJSONObject(0).getInt("time");
@@ -78,22 +70,53 @@ public class Sender {
 			Route route = new Route(node1,node2,oTime,oDist);
 			JSONArray coor = json.getJSONArray("paths").getJSONObject(0).getJSONObject("points").getJSONArray("coordinates");
 			
-			// Pick about 50 nodes evenly.
-			for(int i = coor.length()/23; i < coor.length(); i = i+coor.length()/23){
+			// Pick about 23 nodes evenly.
+			route.nodes.add(route.orig);
+			for(int i = coor.length()/18; i < coor.length(); i = i+coor.length()/18){
 				
 					JSONArray iterator = coor.getJSONArray(i);
 					double lat = iterator.getDouble(1);
 					double lon = iterator.getDouble(0);
 					route.nodes.add(new Node(lat,lon));
 			}
+			route.nodes.add(route.dest);
 			return route;
 	}
 	
-	// Return time (ms)
-	public static Route goo_Wp(Route route) throws IOException{
+	public Route osm(String lat1, String lon1, String lat2, String lon2) throws IOException{
+		
+		String key = "7bf24aff-c48e-469f-a680-3d6fbe65388e";
+		String req = "https://graphhopper.com/api/1/route?point="+lat1+","+lon1+"&point="+lat1+","+lon2+"&points_encoded=false&key="+key;
+		
+		String res = readReq(req);
+		//*********//
+        Utilities.writeOSM(res);;
+        //*********//
+        JSONObject json = new JSONObject(res);
+		Double oDist = json.getJSONArray("paths").getJSONObject(0).getDouble("distance");
+		int oTime = json.getJSONArray("paths").getJSONObject(0).getInt("time");
+		
+		// Store ori, dest, oTime, oDist 
+		Node node1 = new Node(); node1.lat = lat1; node1.lon = lon1;
+		Node node2 = new Node(); node2.lat = lat2; node2.lon = lon2;
+		Route route = new Route(node1,node2,oTime,oDist);
+		JSONArray coor = json.getJSONArray("paths").getJSONObject(0).getJSONObject("points").getJSONArray("coordinates");
+		
+		// Pick about 20 nodes evenly.
+		for(int i = coor.length()/18; i < coor.length(); i = i+coor.length()/18){
+				JSONArray iterator = coor.getJSONArray(i);
+				double lat = iterator.getDouble(1);
+				double lon = iterator.getDouble(0);
+				route.nodes.add(new Node(lat,lon));
+		}
+		return route;
+}
+	
+
+	public Route goo(Route route) throws IOException{
 			
 			String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
-			String req = "https://maps.googleapis.com/maps/api/directions/json?origin="+route.orig.lat+","+route.orig.lon+"&destination="+route.dest.lat+","+route.dest.lon+"&waypoints=";
+			String req = "https://maps.googleapis.com/maps/api/directions/json?origin="+route.orig.lat+","+route.orig.lon+"&destination="+route.dest.lat+","+route.dest.lon+"&departure_time=1532966400&waypoints=";
 			
 			// Insert all nodes into request.
 			req += (route.nodes.get(0).lat + "," + route.nodes.get(0).lon);
@@ -102,13 +125,7 @@ public class Sender {
 			}
 			
 			req += ("&key=" + key);
-			
 			String res = readReq(req);
-			
-			//*********//
-	        Utilities.writeGoo(res);;
-	        //*********//
-	        
 			JSONObject json = new JSONObject(res);
 			int time = 0;
 			JSONArray legs = json.getJSONArray("routes").getJSONObject(0).getJSONArray("legs");
@@ -151,7 +168,7 @@ public class Sender {
 	}
 	
 	// Get a random Node.
-	// Question: Do we pick nodes TOTALLY randomly? Region / distance restriction.
+
 	public static Node ranNode() throws ClassNotFoundException, SQLException{
 		Class.forName("org.sqlite.JDBC");
 		Connection con = DriverManager.getConnection("jdbc:sqlite:osm.db");
