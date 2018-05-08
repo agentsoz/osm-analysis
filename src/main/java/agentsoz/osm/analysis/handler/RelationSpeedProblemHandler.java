@@ -6,14 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import agentsoz.osm.analysis.models.Relation;
 import agentsoz.osm.analysis.models.Way;
+//import agentsoz.osm.analysis.handler.*;
 
 public class RelationSpeedProblemHandler extends BasicProblemHandler{
 
 	public String url;
 	Connection conn;
+	Timer timer;
 		
 	public RelationSpeedProblemHandler(String databaseUrl)
 	{
@@ -25,7 +28,7 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 	{
 		conn = super.connect(url);
 		List<Relation> ls_relation = getRelation();
-	
+		
 		for(Relation relation : ls_relation) 
 		{
 			List<String> wayIds = getWayIdsInRelation(relation.getId());
