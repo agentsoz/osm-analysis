@@ -13,8 +13,9 @@ import model.*;
 public class oneWayDeadEnd {
 	
 	public static void main(String args[]){
-		deadEnd();
+//		deadEnd();
 //		count();
+		impasse();
 	}
 	
 	//64
@@ -40,14 +41,15 @@ public class oneWayDeadEnd {
 							}
 						}
 						if(count != s.size()){
-							way.id = w.attributeValue("ref");
+							way.id = w.attributeValue("id");
 							ways.add(way);
+							System.out.println(way.id);
 						}
 					}
 					//distinct nodes number
 				}
 			}
-			System.out.println(ways.size() + " oneways are deadend hahaha.");
+			System.out.println(ways.size() + " oneways are dead-end .");
 			
 		}catch(DocumentException e) {
 			// TODO Auto-generated catch block
@@ -80,7 +82,7 @@ public class oneWayDeadEnd {
 	
 	
 	//4150
-	public static void a (){
+	public static void impasse (){
 		SAXReader reader = new SAXReader();
 		List<Way> ways = new ArrayList<Way>();
 		
@@ -127,7 +129,6 @@ public class oneWayDeadEnd {
 							node2 = i2.next().attributeValue("ref");
 						//Check if both first & last are in nodes[]
 						int connected = 0;
-						System.out.println(connected);
 						for (String s : nodes){
 							if(node1.equals(s)){
 								connected ++;
@@ -137,9 +138,9 @@ public class oneWayDeadEnd {
 							}
 						}
 						if(connected != 2){
-							System.out.println("find 1");
 							way.id = w.attributeValue("id");
 							ways.add(way);
+							System.out.println(way.id);
 						}
 					}
 				}

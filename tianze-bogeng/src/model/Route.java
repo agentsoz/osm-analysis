@@ -1,8 +1,10 @@
 
 package model;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
-
+import google.Sender;
 public class Route {
 
 	public Node orig;
@@ -23,6 +25,24 @@ public class Route {
 		this.dest = dest;
 	}
 	
-	
-	
+	public void format(){
+		int big;
+		// Store time diff
+		if(this.oTime > this.gTime)
+			big = this.oTime;
+		else
+			big = this.gTime;
+		DecimalFormat df = new DecimalFormat("0.0000");
+		this.timeDif = Double.parseDouble(df.format(Math.abs((this.gTime - this.oTime)/(double)big)));
+		
+		// Store distance diff
+		Double big2 ;
+		if(this.oDis > this.gDis)
+			big2 =  this.oDis;
+		
+		else
+			big2 = this.gDis;
+		
+		this.disDif = Double.parseDouble(df.format(Math.abs((this.gDis - this.oDis)/big2)));
+	}
 }
