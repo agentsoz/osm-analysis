@@ -17,8 +17,8 @@ public class DataBaseHandler implements InsertData {
 	private static DataBaseHandler instance;
 	static final Logger LOG = Logger.getLogger(DataBaseHandler.class.getName());
 	
-	public static DataBaseHandler getInstance() {
-		
+	public static DataBaseHandler getInstance() 
+	{	
 		if(instance == null) {
 			instance = new DataBaseHandler();
 		}

@@ -44,9 +44,9 @@ public class Main {
 			{
 				int speed = Integer.valueOf(args[i+1]);
 				String dbUrl = args[i+2];	
-			 	handler = new MaxSpeedGapProblemHandler(dbUrl, speed);
+			 	handler = new MaxSpeedGapProblemHandler(dbUrl, speed); 
 			}
-			else if(args[i].equals("-relationspeedproblem"))
+			else if(args[i].equals("-relationspeedprolem"))
 			{
 				String dbUrl = args[i+1];
 				handler = new RelationSpeedProblemHandler(dbUrl);
@@ -56,11 +56,26 @@ public class Main {
 				String dbUrl = args[i+1];
 				handler = new SameRouteInRWProblemHandler(dbUrl);
 			}
-//			if(args[i].equals("-prepare"))
-//			{
-//				DataHandler.getInstance().prepare();
-//			}
-			
+			else if(args[i].equals("-FromViaToProblemHandler")) 
+			{
+				String dbUrl = args[i+1];
+				handler = new FromViaToProblemHandler(dbUrl);
+			}
+			else if(args[i].equals("-TypeBoundaryProblem")) 
+			{
+				String dbUrl = args[i+1];
+				handler = new TypeBoundaryProblemHandler(dbUrl);
+			}
+			else if(args[i].equals("-TypeRestrictionProblem")) 
+			{
+				String dbUrl = args[i+1];
+				handler = new TypeRestrictionProblemHandler(dbUrl);
+			}
+			else if(args[i].equals("-NameShortNameProblem")) 
+			{
+				String dbUrl = args[i+1];
+				handler = new NameShortNameProblemHandler(dbUrl);
+			}
 		}
 		return 2;
 		

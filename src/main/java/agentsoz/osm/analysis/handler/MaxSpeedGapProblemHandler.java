@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +31,7 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 	Connection con;
 	Statement stm; 
 	Statement stm1;
+	Timer timer;
 	static final Logger LOG = Logger.getLogger(MaxSpeedGapProblemHandler.class.getName());
 	
 	public MaxSpeedGapProblemHandler(String databaseUrl, int speed)
@@ -42,7 +44,9 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 	public void handleProblem()
 	{		
 		long begin = 0;
-		long end = 0;
+		long end = 0; 
+		
+		running();
 		
 		try 
 		{
@@ -69,6 +73,9 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 		}
 		finally 
 		{
+			timer.cancel();
+			timer.purge();
+			
 			try 
 			{
 				con.close();
@@ -79,6 +86,13 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 			LOG.log(Level.INFO, " speed gap between two ways which is more than '"+speed_gap+"': " + count_speed);
 		}
 	}
+	
+	public void running() 
+	{
+		timer = new Timer();
+		timer.schedule(new RunningPrompt(), 0, 1*1000);
+	}
+	
 	
 	private List<Way> getAllWaysHasMaxSpeed() throws SQLException 
 	{
@@ -96,7 +110,7 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 			ways.add(way);
 		}
 //		LOG.log(Level.INFO, "how many ways have 'maxspeed' attribute: " + ways.size());
-		System.out.println("how many ways have 'maxspeed' attribute: " + ways.size());
+		System.out.println("//n how many ways have 'maxspeed' attribute: " + ways.size());
 		
 		stm.close();
 		

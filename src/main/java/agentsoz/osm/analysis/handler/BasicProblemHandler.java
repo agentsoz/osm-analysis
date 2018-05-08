@@ -23,4 +23,5 @@ public abstract class BasicProblemHandler {
 	}
 	
 	public abstract void handleProblem();
+
 }
