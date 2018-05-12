@@ -1,7 +1,6 @@
-package Handle;
+package agentsoz.osm.analysis.handler;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,11 +24,16 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 	Connection con;
 	
 	List<String> wayIDs;
+	private String url;
+	
+	public FromViaToProblemHandler(String databaseUrl) 
+	{
+		url = "jdbc:sqlite:" + databaseUrl;
+	}
 	
 	@Override
-	public void handleProblem() {
-		// TODO Auto-generated method stub
-		
+	public void handleProblem() 
+	{	
 		wayIDs = new ArrayList<>();
 		
 		long begin = 0;
@@ -37,7 +41,7 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:osm.db");
+			con = super.connect(url);
 			stm = con.createStatement();
 			stm1 = con.createStatement();
 			stm2 = con.createStatement();
@@ -69,11 +73,13 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		
 	}
 
-	private void getRelations() throws SQLException {
-		// TODO Auto-generated method stub
+	private void getRelations() throws SQLException 
+	{
 		String sql_wayID = "SELECT ID FROM ways";
 		ResultSet res_wayID = stm5.executeQuery(sql_wayID);
-		while(res_wayID.next()) {
+		
+		while(res_wayID.next()) 
+		{
 			wayIDs.add(res_wayID.getString("ID"));
 		}
 		stm5.close();
@@ -93,12 +99,12 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 				LOG.log(Level.INFO, percent + "% data has been finished");
 				count = 0;
 			}
-			getMembers(res.getInt("ID"));
+			getMembers(res.getString("ID"));
 		}
 	}
 
-	private void getMembers(int relationID) throws SQLException {
-		// TODO Auto-generated method stub
+	private void getMembers(String relationID) throws SQLException 
+	{
 		String sql = "SELECT member_type, member_ref,member_role FROM relations_members WHERE relation_id='"+relationID+"'";
 		ResultSet res = stm2.executeQuery(sql);
 		
@@ -106,42 +112,52 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		
 		int test = 0;
 		int check = 0;
-		while(res.next()) {
+		while(res.next())
+		{
 			test++;
-			if(res.getString("member_role").equals("from")) {
+			if(res.getString("member_role").equals("from"))
+			{
 				nodes[0] = res.getString("member_ref");
 				check = test;
 			}
-			if(res.getString("member_role").equals("via") && (check == test + 1)) {
+			else if(res.getString("member_role").equals("via") && (check == test + 1))
+			{
 				nodes[1] = res.getString("member_ref");
 			}
-			if(res.getString("member_role").equals("to") && (check == test + 2)) {
+			else if(res.getString("member_role").equals("to") && (check == test + 2))
+			{
 				nodes[2] = res.getString("member_ref");
 			}
 		}
 		
-		if(wayIDs.contains(nodes[0]) && wayIDs.contains(nodes[2])) {
+		if(wayIDs.contains(nodes[0]) && wayIDs.contains(nodes[2]))
+		{
 			check(nodes,relationID);
 		}
 	}
 
-	private void check(String[] nodes, int relationID) throws SQLException {
-		// TODO Auto-generated method stub
+	private void check(String[] nodes, String relationID) throws SQLException
+	{
 		if(!(nodes[0].equals("") || nodes[1].equals("") || nodes[2].equals(""))) {
 			String sql_from = "SELECT node_id FROM ways_nodes WHERE way_id='"+nodes[0]+"'";
 			ResultSet res_from = stm3.executeQuery(sql_from);
 			String last_node = "";
-			while(res_from.next()) {
+			
+			while(res_from.next()) 
+			{
 				last_node = res_from.getString("node_id");
 			}
 			String sql_to = "SELECT node_id FROM ways_nodes WHERE way_id='"+nodes[2]+"'";
 			ResultSet res_to = stm4.executeQuery(sql_to);
 			String first_node = "";
-			while(res_to.next()) {
+			
+			while(res_to.next())
+			{
 				first_node = res_to.getString("node_id");
 				break;
 			}
-			if(!(first_node.equals(last_node) && first_node.equals(nodes[1]))) {
+			if(!(first_node.equals(last_node) && first_node.equals(nodes[1]))) 
+			{
 				countIssue++;
 				LOG.log(Level.INFO, "the relation(" + relationID + ") has from_via_to problem");
 			}

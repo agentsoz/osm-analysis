@@ -1,7 +1,6 @@
-package Handle;
+package agentsoz.osm.analysis.handler;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,18 +17,22 @@ public class TypeBoundaryProblemHandler extends PrerequisitesProblemHandler {
 	Connection con = null;
 	
 	int countIssues;
+	private String url;
 	
+	public TypeBoundaryProblemHandler(String databaseUrl)
+	{
+		url = "jdbc:sqlite:" + databaseUrl;
+	}
 	
 	@Override
-	public void handleProblem() {
-		// TODO Auto-generated method stub
-		
+	public void handleProblem()
+	{
 		long begin = 0;
 		long end = 0;
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:osm.db");
+			con = super.connect(url);
 			stm = con.createStatement();
 			stm1 = con.createStatement();
 			stm2 = con.createStatement();
@@ -71,11 +74,11 @@ public class TypeBoundaryProblemHandler extends PrerequisitesProblemHandler {
 				LOG.log(Level.INFO, percent + "% data has been finished");
 				current = 0;
 			}
-			getTags(res.getInt("ID"));
+			getTags(res.getString("ID"));
 		}
 	}
 
-	private void getTags(int relationID) throws SQLException {
+	private void getTags(String relationID) throws SQLException {
 		// TODO Auto-generated method stub
 		String sql = "SELECT tag_key,tag_value FROM relations_tags WHERE relation_id='"+relationID+"'";
 		ResultSet res = stm1.executeQuery(sql);
