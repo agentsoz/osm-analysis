@@ -12,13 +12,15 @@ public class LOGReadWrite {
 	
 	private String filepath;
 	
+	private File file;
+	
 	public LOGReadWrite(String filepath) {
 		this.filepath = filepath;
 	}
 
 	public void write(String content) {
 		
-		File file = new File(filepath);
+		file = new File(filepath);
 		
 		try {
 			FileWriter fw = new FileWriter(file);
@@ -33,15 +35,19 @@ public class LOGReadWrite {
 		}
 	}
 	
-	public void read() {
-		File file = new File(filepath);
+	public String read() {
+		
+		file = new File(filepath);
+		
+		String content = "";
 		
 		try {
 			FileReader fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr);
 			String line = null;
 			while((line = br.readLine()) != null) {
-				System.out.println(line);
+				content = content + line;
+			//	System.out.println(line);
 			}
 			
 			br.close();
@@ -52,7 +58,16 @@ public class LOGReadWrite {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
+		
+		return content;
+		
+	}
+	
+	public File getFile() {
+		
+		return file;
+		
 	}
 	
 }
