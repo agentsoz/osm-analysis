@@ -19,35 +19,38 @@ import model.Route;
 
 public class Sender {
 
-	
-	
-	public Route genRoute(){
+	public Route ranRoute(){
 		while(true){
 			
 			Route route = null;
 			try {
-//				route = goo_Wp(osm_Co(ranNode(),ranNode()));
-				Node node1 = new Node(); node1.lat = "-36.4333464";node1.lon ="148.6149967";
-				Node node2 = new Node(); node2.lat = "-37.1625186";node2.lon = "145.8704504";
-				route = goo(osm(node1,node2));
-				route.format();
+				route = goo(osm(ranNode(),ranNode()));
 				return route;
 			}
-//			catch (ClassNotFoundException | SQLException e) {
-//				e.printStackTrace();
-//			}
-			catch (Exception e) {
+			catch (IOException e) {
 				continue;
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+		
 		}
 	}
 	
-	public Route genRoute(Node node1, Node node2) throws IOException{
-			Route route= goo(osm(node1,node2));
-			route.format();
-			
-			
-		return route;
+	public Route genRoute(Node node1, Node node2){
+			Route route;
+			try {
+				route = goo(osm(node1,node2));
+				return route;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Route generation failed.");
+			}
+			return null;
 	}
 	
 	// Request advice: Departure_time=1532959200 July 31st 2018
@@ -70,9 +73,9 @@ public class Sender {
 			Route route = new Route(node1,node2,oTime,oDist);
 			JSONArray coor = json.getJSONArray("paths").getJSONObject(0).getJSONObject("points").getJSONArray("coordinates");
 			
-			// Pick about 23 nodes evenly.
+			// Pick 20 nodes evenly.
 			route.nodes.add(route.orig);
-			for(int i = coor.length()/18; i < coor.length(); i = i+coor.length()/18){
+			for(int i = coor.length()/18; i < coor.length(); i += coor.length()/18){
 				
 					JSONArray iterator = coor.getJSONArray(i);
 					double lat = iterator.getDouble(1);
@@ -89,9 +92,7 @@ public class Sender {
 		String req = "https://graphhopper.com/api/1/route?point="+lat1+","+lon1+"&point="+lat1+","+lon2+"&points_encoded=false&key="+key;
 		
 		String res = readReq(req);
-		//*********//
-        Utilities.writeOSM(res);;
-        //*********//
+	
         JSONObject json = new JSONObject(res);
 		Double oDist = json.getJSONArray("paths").getJSONObject(0).getDouble("distance");
 		int oTime = json.getJSONArray("paths").getJSONObject(0).getInt("time");
@@ -142,6 +143,7 @@ public class Sender {
 			}
 			
 			route.gDis = dis;
+			route.format();
 			return route;
 	}
 	
@@ -167,8 +169,6 @@ public class Sender {
 		return res;
 	}
 	
-	// Get a random Node.
-
 	public static Node ranNode() throws ClassNotFoundException, SQLException{
 		Class.forName("org.sqlite.JDBC");
 		Connection con = DriverManager.getConnection("jdbc:sqlite:osm.db");

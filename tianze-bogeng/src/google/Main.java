@@ -30,7 +30,7 @@ public class Main {
 		System.out.println();
 		int no = 0;
 		for(int i = 1; i <= amount; i ++){
-			route = sender.genRoute();
+			route = sender.ranRoute();
 			if(route.disDif >= difGap){
 				no ++;
 				record.add(route);

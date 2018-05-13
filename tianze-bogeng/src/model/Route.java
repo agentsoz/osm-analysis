@@ -25,6 +25,28 @@ public class Route {
 		this.dest = dest;
 	}
 	
+	public void analyse() throws IOException{
+		Sender sender = new Sender();
+		Iterator<Node> i1 = this.nodes.iterator();
+		Iterator<Node> i2 = this.nodes.iterator();
+		i2.next();
+		Route curr;
+		System.out.println("Difference of each part (m)");
+		Node node1;
+		Node node2;
+		
+		while(i2.hasNext()){
+			node1 = i1.next();
+			node2 = i2.next();
+			
+			curr = sender.genRoute(node1, node2);
+			
+			curr.format();
+			DecimalFormat df = new DecimalFormat("0.00");
+			System.out.println(df.format(Math.abs(curr.oDis - curr.gDis)));
+		}
+	}
+	
 	public void format(){
 		int big;
 		// Store time diff

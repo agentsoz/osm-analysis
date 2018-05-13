@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 import org.json.JSONObject;
 
+import model.Node;
+
 public class Test {
 
 	public static void main(String[] args) throws IOException {
@@ -17,11 +19,12 @@ public class Test {
 	}		
 
 	public static void a(){
-		Handler handler = new Handler();
 		Sender sender = new Sender();
 		try {
-			handler.analyse(sender.genRoute());
-		} catch (IOException e) {-
+			Node node1 = new Node(); node1.lat="-36.4333464"; node1.lon="148.6149967";
+			Node node2 = new Node(); node2.lat="-37.1625186"; node2.lon="145.8704504";
+			sender.genRoute(node1,node2).analyse();;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
