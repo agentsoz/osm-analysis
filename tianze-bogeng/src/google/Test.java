@@ -1,32 +1,64 @@
 package google;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.*;
 import java.sql.*;
 import java.text.DecimalFormat;
+import java.util.Iterator;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import org.json.JSONObject;
 
 import model.Node;
+import model.Route;
 
 public class Test {
 
-	public static void main(String[] args) throws IOException {
-		a();
+	public static void main(String[] args) throws IOException  {
+
+		int i = 3;
+		double s = 4;
+		System.out.println(s/i);
+//		Node node1 = new Node(); node1.lat="-36.4333464"; node1.lon="148.6149967";
+//		Node node2 = new Node(); node2.lat="-37.1625186"; node2.lon="145.8704504";
+//		
+//		Route cur = Sender.goo(Sender.osm(node1, node2));
+//		Node first,second;
+//		Iterator<Node> i1 = cur.nodes.iterator();
+//		Iterator<Node> i2 = cur.nodes.iterator();
+//		i2.next();
+//		while(i2.hasNext()){
+//			first = i1.next();
+//			second = i2.next();
+//			System.out.println(Sender.gooSimple(Sender.osmSimple(first, second)).disDif);
+//		}
+//		
+//		a();
 //		printTable();
 //		printJSON();
 	}		
 
-	public static void a(){
-		Sender sender = new Sender();
-		try {
-			Node node1 = new Node(); node1.lat="-36.4333464"; node1.lon="148.6149967";
-			Node node2 = new Node(); node2.lat="-37.1625186"; node2.lon="145.8704504";
-			sender.genRoute(node1,node2).analyse();;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void a() throws IOException{
+		Node node1 = new Node(); node1.lat="-36.4333464"; node1.lon="148.6149967";
+		Node node2 = new Node(); node2.lat="-37.1625186"; node2.lon="145.8704504";
+
+			Route cur = Sender.goo(Sender.osm(node1, node2));
+			
+			Node first,second;
+			int i1=0,i2=1; 
+			while(i2 <= 21){
+				first = cur.nodes.get(i2++);
+				Sender.goo(Sender.osm(first, node2));
+				System.out.println(first.lat);
+				if(i2 == 20)
+					break;
+//				second = cur.nodes.get(i2++);
+//				System.out.println(Sender.genRoute(first,second).dest.lat);
+			}
+			
+		
 	}
 	
 public static void printTable(){	
