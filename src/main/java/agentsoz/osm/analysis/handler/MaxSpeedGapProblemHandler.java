@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import agentsoz.osm.analysis.models.Way;
 
@@ -25,14 +23,12 @@ import agentsoz.osm.analysis.models.Way;
 
 public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 	
-    private int count_speed = 0;
 	int speed_gap;
 	private String url;
 	Connection con;
 	Statement stm; 
 	Statement stm1;
 	Timer timer;
-	static final Logger LOG = Logger.getLogger(MaxSpeedGapProblemHandler.class.getName());
 	
 	public MaxSpeedGapProblemHandler(String databaseUrl, int speed)
 	{
@@ -43,9 +39,6 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 	@Override
 	public void handleProblem()
 	{		
-		long begin = 0;
-		long end = 0; 
-		
 		running();
 		
 		try 
@@ -55,24 +48,20 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 			stm = con.createStatement();
 			stm1 = con.createStatement();
 			
-			begin = System.currentTimeMillis();
 			List<Way> ways = getAllWaysHasMaxSpeed();
 			compare(ways);
-			end = System.currentTimeMillis();
-			
 		}
-		catch (ClassNotFoundException e)
+		catch (Exception e)
 		{
-			LOG.severe("ClassNotFoundException");
 			e.printStackTrace();
 		} 
-		catch (SQLException e) 
-		{
-			LOG.severe("SQLException");
-			e.printStackTrace();
-		}
 		finally 
 		{
+			if(isFound == false) 
+			{
+				System.out.println("no match found");
+			}
+
 			timer.cancel();
 			timer.purge();
 			
@@ -80,10 +69,10 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 			{
 				con.close();
 			}
-			catch (SQLException e) {e.printStackTrace();}
-			
-			LOG.log(Level.INFO, "the running time is " + (end - begin) + "ms");
-			LOG.log(Level.INFO, " speed gap between two ways which is more than '"+speed_gap+"': " + count_speed);
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -109,8 +98,6 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 			getNodes(way, res.getString("way_id"));
 			ways.add(way);
 		}
-//		LOG.log(Level.INFO, "how many ways have 'maxspeed' attribute: " + ways.size());
-		System.out.println("//n how many ways have 'maxspeed' attribute: " + ways.size());
 		
 		stm.close();
 		
@@ -136,19 +123,18 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 		String way_i_l;
 		String way_j_f;
 		String way_j_l;
-		int count = 0;
-		int percent = 0;
-		for(int i=0;i<ways.size();i++) {
-			count++;
-			if(count >= ways.size()/10) {
-				percent = percent + 10;
-				LOG.log(Level.INFO, percent + "% data has been finished");
-				count = 0;
-			}
+
+		String all = "";
+		System.out.println();
+		
+		for(int i=0;i<ways.size();i++) 
+		{
 			int i_size = ways.get(i).getNodesRef().size();
 			way_i_f = ways.get(i).getNodesRef().get(0);
-			way_i_l = ways.get(i).getNodesRef().get(i_size-1);
-			for(int j=i+1;j<ways.size()-1;j++) {
+ 			way_i_l = ways.get(i).getNodesRef().get(i_size-1);
+			
+			for(int j=i+1;j<ways.size()-1;j++)
+			{
 				int j_size = ways.get(j).getNodesRef().size();
 				way_j_f = ways.get(j).getNodesRef().get(0);
 				way_j_l = ways.get(j).getNodesRef().get(j_size-1);
@@ -156,17 +142,34 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 				if(way_i_f.equals(way_j_f) ||
 						way_i_f.equals(way_j_l) || 
 							way_i_l.equals(way_j_l) ||
-								way_i_l.equals(way_j_f)) {
+								way_i_l.equals(way_j_f))
+				{
 					int actual_gap = Math.abs(ways.get(i).getSpeed() - ways.get(j).getSpeed());
-					if(actual_gap > speed_gap) {
-						count_speed++;
-//						LOG.log(Level.INFO, "way(" + ways.get(i).getId() + ") and way(" + ways.get(j).getId() + ") "
-//								+ "have max speed problem");
-						System.out.println("way(" + ways.get(i).getId() + ") and way(" + ways.get(j).getId() + ") "
-								+ "have max speed problem");
+					if(actual_gap > speed_gap) 
+					{
+						isFound = true;
+						
+						// way_maxspeed: id1=speed1 id2=speed2 diff=speed3
+						String output = "way_maxspeed_diff: " + "way_" + ways.get(i).getId() + "=" + ways.get(i).getSpeed()
+						         + " " + "way_" + ways.get(j).getId() + "=" + ways.get(j).getSpeed() + " diff=" + actual_gap;	
+						all = all + "\n" + output;
 					}
 				}
 			}
 		}
+		if(writeFile == false) 
+		{
+			System.out.print(all);
+		}
+		if(writeFile == true)
+		{
+			writeToFile(path,all);
+		}
+	}
+
+	@Override
+	public void writeToFile(String path, String content) 
+	{
+		LOGReadWrite.write(content, path);
 	}
 }

@@ -1,11 +1,22 @@
 package agentsoz.osm.analysis.app;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import agentsoz.osm.analysis.handler.*;
 
 public class Main {
 	
 	public static String OSM_FILE;
 	private static BasicProblemHandler handler;
+	static String dbUrl;
+	static Options options;
+	static String file_path;
+	static String type;
 	
 	/**
 	 * program entry point
@@ -14,16 +25,16 @@ public class Main {
 	 * */
 	public static void main(String args[]) 
 	{
-		int ref_input = parse(args);
+		parse(args);
 		
-		if(ref_input == 1)
+		if(file_path != null) 
 		{
-			DataBaseHandler.getInstance().createTables();
+			handler.setFilePath(file_path);
 		}
-		else if(ref_input == 2)
+		if(handler != null) 
 		{
 			handler.handleProblem();
-		}	
+		}
 	}
 	
 	/**
@@ -31,54 +42,74 @@ public class Main {
 	 * For instance, --way-file FILE could be used to set the var WAY_FILE to some
 	 * user specified value.
 	 * */
-	public static int parse(String[] args) 
-	{
-		for(int i = 0; i < args.length-1; i++) 
-		{
-			if(args[i].equals("-file")) 
+	public static void parse(String[] args) 
+	{	
+		// create command line parser
+		CommandLineParser parser = new DefaultParser();
+		
+		// create the options
+		options = new Options();
+		
+		options.addOption("f", "file", true,  "Here you can set database path");
+		options.addOption("w", "out-file", true, "Write file to a text file");
+		options.addOption("s", "search-missing", true, "Search missing attribute");
+		options.addOption("way", false, "choose type way");
+		options.addOption("relation", true, "choose type relation");
+		options.addOption("opt1", "get-ways-speed-change", true, "get two adjacent way speed different greater than input value");
+		options.addOption("opt2", "get-ways-relation-speed-change", false, "get ways' max_speed exceed its relation");
+		
+		
+		try 
+		{	
+			CommandLine cmd = parser.parse(options, args);
+			
+			if(cmd.hasOption("f")) 
 			{
-				OSM_FILE = args[i+1];
-				return 1;
+				dbUrl = cmd.getOptionValue("f");
 			}
-			else if(args[i].equals("-maxspeedgapproblem")) 
+			if(cmd.hasOption("w")) 
 			{
-				int speed = Integer.valueOf(args[i+1]);
-				String dbUrl = args[i+2];	
-			 	handler = new MaxSpeedGapProblemHandler(dbUrl, speed); 
+				String path = cmd.getOptionValue("w");
+				file_path = path;
 			}
-			else if(args[i].equals("-relationspeedprolem"))
+			if(cmd.hasOption("way")) 
 			{
-				String dbUrl = args[i+1];
+				type = "ways";
+			} 
+			if(cmd.hasOption("s")) 
+			{
+				String attribute = cmd.getOptionValue("s");
+//				SearchMissingAttribute search = new SearchMissingAttribute(type); 
+//				search.search(attribute);
+			}
+			if(cmd.hasOption("opt1")) 
+			{
+				int speed_threshold = Integer.parseInt(cmd.getOptionValue("opt1"));
+				handler = new MaxSpeedGapProblemHandler(dbUrl, speed_threshold);
+			}
+			if(cmd.hasOption("opt2")) 
+			{
 				handler = new RelationSpeedProblemHandler(dbUrl);
 			}
-			else if(args[i].equals("-sameRouteInRWProblem"))
-			{
-				String dbUrl = args[i+1];
-				handler = new SameRouteInRWProblemHandler(dbUrl);
-			}
-			else if(args[i].equals("-FromViaToProblemHandler")) 
-			{
-				String dbUrl = args[i+1];
-				handler = new FromViaToProblemHandler(dbUrl);
-			}
-			else if(args[i].equals("-TypeBoundaryProblem")) 
-			{
-				String dbUrl = args[i+1];
-				handler = new TypeBoundaryProblemHandler(dbUrl);
-			}
-			else if(args[i].equals("-TypeRestrictionProblem")) 
-			{
-				String dbUrl = args[i+1];
-				handler = new TypeRestrictionProblemHandler(dbUrl);
-			}
-			else if(args[i].equals("-NameShortNameProblem")) 
-			{
-				String dbUrl = args[i+1];
-				handler = new NameShortNameProblemHandler(dbUrl);
-			}
+//			else 
+//			{
+//				System.out.println("failed to parse command line arguments");
+//				help();
+//			}
 		}
-		return 2;
-		
+		catch(ParseException e)
+		{
+			System.out.println(e.getMessage());
+			help();
+		}
 	} 
 
+	private static void help() 
+	{
+		HelpFormatter formatter = new HelpFormatter();
+		
+		formatter.printHelp("Menu", options);
+		
+		System.exit(0);
+	}
 }

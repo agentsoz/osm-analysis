@@ -24,7 +24,7 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 	}
 
 	@Override
-	public void handleProblem() 
+	public void handleProblem()
 	{
 		conn = super.connect(url);
 		List<Relation> ls_relation = getRelation();
@@ -49,9 +49,12 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 				}
 			}
 		}
-		try {
+		try 
+		{
 			conn.close();
-		} catch (SQLException e) {
+		}
+		catch (SQLException e)
+		{
 			e.printStackTrace();
 		}
 	}
@@ -77,7 +80,9 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 				relation.setSpeed(speed);
 				ls_relations.add(relation); 
 			}
-		}catch(SQLException e) {
+		}
+		catch(SQLException e) 
+		{
 			System.out.println(e.getMessage());
 		}
 		return ls_relations;
@@ -102,8 +107,10 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 			 {
 				 ls_wayIds.add(rs.getString("member_ref"));
 			 }
-		}catch(SQLException e) {
-				System.out.println(e.getMessage());
+		}
+		catch(SQLException e) 
+		{
+			System.out.println(e.getMessage());
 		}
 		return ls_wayIds;
 	}
@@ -153,9 +160,17 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 				    break;
 				}
 			}
-		}catch(SQLException e) {
+		}
+		catch(SQLException e) 
+		{
 				System.out.println(e.getMessage());
 		}
 		return way;
+	}
+
+	@Override
+	public void writeToFile(String path, String content) {
+		// TODO Auto-generated method stub
+		
 	}
 } 
