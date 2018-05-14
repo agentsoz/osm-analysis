@@ -16,49 +16,35 @@ public class Route {
 	public double gDis;
 	public double timeDif;
 	public double disDif;
+	public double timeDifMs;
+	public double disDifM;
 	
-	public Route(Node orig, Node dest,int time, double osmDis){
+	public Route(){
+		
+	}
+	
+	public Route(Node orig, Node dest,int oTime, double oDis){
 		nodes = new ArrayList<Node>();
-		this.oTime = time;
-		this.oDis = osmDis;
+		this.oTime = oTime;
+		this.oDis = oDis;
 		this.orig = orig;
 		this.dest = dest;
 	}
 	
-	public void analyse() throws IOException{
-		Sender sender = new Sender();
-		Iterator<Node> i1 = this.nodes.iterator();
-		Iterator<Node> i2 = this.nodes.iterator();
-		i2.next();
-		Route curr;
-		System.out.println("Difference of each part (m)");
-		Node node1;
-		Node node2;
-		
-		while(i2.hasNext()){
-			node1 = i1.next();
-			node2 = i2.next();
-			
-			curr = sender.genRoute(node1, node2);
-			
-			curr.format();
-			DecimalFormat df = new DecimalFormat("0.00");
-			System.out.println(df.format(Math.abs(curr.oDis - curr.gDis)));
-		}
-	}
-	
 	public void format(){
-		int big;
+		double big;
+		
 		// Store time diff
 		if(this.oTime > this.gTime)
 			big = this.oTime;
 		else
 			big = this.gTime;
-		DecimalFormat df = new DecimalFormat("0.0000");
-		this.timeDif = Double.parseDouble(df.format(Math.abs((this.gTime - this.oTime)/(double)big)));
+		DecimalFormat df = new DecimalFormat("0.00000");
+		this.timeDif = Double.parseDouble(df.format(Math.abs((this.gTime - this.oTime)/big)));
+		this.timeDifMs = Math.abs(this.gTime - this.oTime);
 		
 		// Store distance diff
-		Double big2 ;
+		double big2 ;
 		if(this.oDis > this.gDis)
 			big2 =  this.oDis;
 		
@@ -66,5 +52,6 @@ public class Route {
 			big2 = this.gDis;
 		
 		this.disDif = Double.parseDouble(df.format(Math.abs((this.gDis - this.oDis)/big2)));
+		this.disDifM = Math.abs(this.gDis - this.oDis);
 	}
 }

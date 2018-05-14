@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import model.*;
 
@@ -13,46 +14,143 @@ public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
 		
-		int amount = Integer.parseInt(args[0]);
-		double difGap = Double.parseDouble(args[1]);
 		
-		presentation(amount,difGap);
-		
+		if (validation(args) == true){
+			parse(args);
+		}
 	}
 	
-	public static void presentation(int amount, double difGap){
-		Sender sender = new Sender();
-		Handler handler = new Handler();
-		List<Route> record = new ArrayList<Route>();
-		Route route;
-		System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Diff Ratio");
-		System.out.println();
-		System.out.println();
-		int no = 0;
-		for(int i = 1; i <= amount; i ++){
-			route = sender.ranRoute();
-			if(route.disDif >= difGap){
-				no ++;
-				record.add(route);
-				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",no,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDif);
-				System.out.println();
+	public static boolean validation(String args[]){
+		// Both --list-of-origin/dest and --generate-random
+		int val = 0;
+		for(String s : args){
+			if (s.equals("--list-of-origin/dest"))
+				val++;
+			if(s.equals("--generate-random-origins"))
+				val++;
+		}
+		if(val == 2)
+			return false;
+		
+		return true;
+	}
+	
+	public static void parse(String args[]){
+		int num;
+		double radius = 0;
+		double distPercentDiff = 0;
+		double kmDiff = 0;
+		double timePercentDiff = 0;
+		double hrDiff = 0;
+		boolean distCompare = false;
+		boolean timeCompare = false;
+		
+		// Choice 1: Random routes (with specific radius).
+		if(args[0].equals("--generate-random-origins")){
+			
+			// Get num, radius, percent, diff 's value
+			num = Integer.parseInt(args[1]);
+			for(int i = 2; i < args.length; i++){
+				if(args[i].equals("--radius-of-dest"))
+					radius = Double.parseDouble(args[i+1])*1000;
+				if(args[i].equals("--dist-diff-reporting-threshold-percent")){
+					distPercentDiff = Double.parseDouble(args[i+1])/100;
+					distCompare = true;
+				}
+				if(args[i].equals("--dist-diff-reporting-threshold-km")){
+					kmDiff = Double.parseDouble(args[i+1]);
+					distCompare = true;
+				}
+				if(args[i].equals("--time-diff-reporting-threshold-percent")){
+					timePercentDiff = Double.parseDouble(args[i+1]);
+					timeCompare = true;
+				}
+				if(args[i].equals("--time-diff-reporting-threshold-hr")){
+					hrDiff = Double.parseDouble(args[i+1]);
+					timeCompare = true;
+				}
+			}
+			
+			// Generate and store all random routes
+			ArrayList<Route> routes = new ArrayList<Route>();
+			for(int i = 0; i < num; i++){
+				Route route;
+				try {
+					route = Sender.ranRoute(radius);
+					routes.add(route);
+					
+				} catch (ClassNotFoundException | SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			//Analyse ALL routes
+			if(distCompare == true){
+				//Default 20%
+				if(distPercentDiff == 0 && kmDiff == 0)
+					Utilities.analyseRoutesDistPer(routes, 0.2);
+				else if(distPercentDiff != 0)
+					Utilities.analyseRoutesDistPer(routes, distPercentDiff);
+				else
+					Utilities.analyseRoutesDistKm(routes, kmDiff);
+			}
+			else if(timeCompare == true){
+				if(timePercentDiff == 0 && hrDiff == 0)
+					Utilities.analyseRoutesTimePer(routes, 0.2);
+				else if(timePercentDiff != 0)
+					Utilities.analyseRoutesTimePer(routes, timePercentDiff);
+				else
+					Utilities.analyseRoutesTimeMin(routes, hrDiff);
 			}
 		}
-		
-		System.out.println();
-		System.out.println("Please enter the route number to analysis it:");
-		Scanner scan = new Scanner(System.in);
-		Route choice = record.get(scan.nextInt());
-		try {
-			handler.analyse(choice);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
 	
-}
 		
+		//Choice 2: User input a list of ori/dest
+		else if(args[0].equals("--list-of-origin/dest")){
+			ArrayList<Route> routes = Utilities.parseListOfCoor(args[1]);
+			
+			for(int i = 2; i < args.length; i++){
+				if(args[i].equals("--dist-diff-reporting-threshold-percent")){
+					distPercentDiff = Double.parseDouble(args[i+1])/100;
+					distCompare = true;
+				}
+				if(args[i].equals("--dist-diff-reporting-threshold-km")){
+					kmDiff = Double.parseDouble(args[i+1]);
+					distCompare = true;
+				}
+				if(args[i].equals("--time-diff-reporting-threshold-percent")){
+					timePercentDiff = Double.parseDouble(args[i+1]);
+					timeCompare = true;
+				}
+				if(args[i].equals("--time-diff-reporting-threshold-hr")){
+					hrDiff = Double.parseDouble(args[i+1]);
+					timeCompare = true;
+				}
+			}
+			
+			//Analyse ALL routes
+			if(distCompare == true){
+				//Default 20%
+				if(distPercentDiff == 0 && kmDiff == 0)
+					Utilities.analyseRoutesDistPer(routes, 0.2);
+				else if(distPercentDiff != 0)
+					Utilities.analyseRoutesDistPer(routes, distPercentDiff);
+				else
+					Utilities.analyseRoutesDistKm(routes, kmDiff);
+			}
+			else if(timeCompare == true){
+				if(timePercentDiff == 0 && hrDiff == 0)
+					Utilities.analyseRoutesTimePer(routes, 0.2);
+				else if(timePercentDiff != 0)
+					Utilities.analyseRoutesTimePer(routes, timePercentDiff);
+				else
+					Utilities.analyseRoutesTimeMin(routes, hrDiff);
+			}
+		}
+	}
+}
+	
+
 
 	
 	

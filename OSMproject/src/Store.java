@@ -24,7 +24,7 @@ public class Store implements InsertData {
 		/*
 		 * change the path because the data.osm is too big, thus it is unnecessary to upload
 		 * */
-		String path = "D:\\GitHub\\osm-analysis\\data\\data.osm";
+		String path = "D:\\data.osm";
 		File filename = new File(path);
 		InputStreamReader reader;
 		try {

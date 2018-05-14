@@ -19,7 +19,39 @@ import model.Route;
 
 public class Sender {
 
-	public Route ranRoute(){
+	public static Route ranRoute(double radius) throws ClassNotFoundException, SQLException{
+		//Totally random route
+		if(radius == 0)
+			return ranRoute();
+		//Random route with origin and radius specified
+		else{
+			Node ori;
+			Node dest;
+			
+			while(true){
+				try{
+					while(true){
+						ori = ranNode();
+						dest = ranNode();
+						if(Utilities.distance(ori,dest) <= radius){
+							break;
+						}
+					}
+					// Generate route
+					Route route = goo(osm(ori,dest));
+					System.out.println("Generated: "+route.orig.lat+","+route.orig.lon+"/"+route.dest.lat+","+route.dest.lon);
+
+					return route;
+				}catch(IOException e){
+					continue;
+				}
+			}
+		}
+
+	}
+	
+	//Totally random route
+	public static Route ranRoute(){
 		while(true){
 			
 			Route route = null;
@@ -40,7 +72,7 @@ public class Sender {
 		}
 	}
 	
-	public Route genRoute(Node node1, Node node2){
+	public static Route genRoute(Node node1, Node node2){
 			Route route;
 			try {
 				route = goo(osm(node1,node2));
@@ -58,9 +90,9 @@ public class Sender {
 	
 	// Store ori, dest, oTime, oDist into Route object and return the object.
 		
-	public Route osm(Node node1, Node node2) throws IOException{
+	public static Route osm(Node node1, Node node2) throws IOException{
 			
-			String key = "7bf24aff-c48e-469f-a680-3d6fbe65388e";
+			String key = "6b8e1ba3-dcfd-46a1-872a-cce6c73a6831";
 			String req = "https://graphhopper.com/api/1/route?point="+node1.lat+","+node1.lon+"&point="+node2.lat+","+node2.lon+"&points_encoded=false&key="+key;
 			
 			String res = readReq(req);
@@ -75,7 +107,7 @@ public class Sender {
 			
 			// Pick 20 nodes evenly.
 			route.nodes.add(route.orig);
-			for(int i = coor.length()/18; i < coor.length(); i += coor.length()/18){
+			for(int i = coor.length()/19; i < coor.length(); i += coor.length()/19){
 				
 					JSONArray iterator = coor.getJSONArray(i);
 					double lat = iterator.getDouble(1);
@@ -86,9 +118,24 @@ public class Sender {
 			return route;
 	}
 	
-	public Route osm(String lat1, String lon1, String lat2, String lon2) throws IOException{
+	//Only get oTime and oDis, without filling the nodes ArrayList of Route object
+	public static Route osmSimple(Node node1, Node node2) throws IOException{
+		String key = "6b8e1ba3-dcfd-46a1-872a-cce6c73a6831";
+		String req = "https://graphhopper.com/api/1/route?point="+node1.lat+","+node1.lon+"&point="+node2.lat+","+node2.lon+"&points_encoded=false&key="+key;
 		
-		String key = "7bf24aff-c48e-469f-a680-3d6fbe65388e";
+		String res = readReq(req);
+
+        JSONObject json = new JSONObject(res);
+		Double oDist = json.getJSONArray("paths").getJSONObject(0).getDouble("distance");
+		int oTime = json.getJSONArray("paths").getJSONObject(0).getInt("time");
+		Route route = new Route(node1,node2,oTime,oDist);
+	
+		return route;
+	}
+	
+	public static Route osm(String lat1, String lon1, String lat2, String lon2) throws IOException{
+		
+		String key = "6b8e1ba3-dcfd-46a1-872a-cce6c73a6831";
 		String req = "https://graphhopper.com/api/1/route?point="+lat1+","+lon1+"&point="+lat1+","+lon2+"&points_encoded=false&key="+key;
 		
 		String res = readReq(req);
@@ -104,7 +151,7 @@ public class Sender {
 		JSONArray coor = json.getJSONArray("paths").getJSONObject(0).getJSONObject("points").getJSONArray("coordinates");
 		
 		// Pick about 20 nodes evenly.
-		for(int i = coor.length()/18; i < coor.length(); i = i+coor.length()/18){
+		for(int i = coor.length()/19; i < coor.length(); i = i+coor.length()/19){
 				JSONArray iterator = coor.getJSONArray(i);
 				double lat = iterator.getDouble(1);
 				double lon = iterator.getDouble(0);
@@ -113,8 +160,22 @@ public class Sender {
 		return route;
 }
 	
-
-	public Route goo(Route route) throws IOException{
+	// Only get gTime and gDis without specifying waypoints.
+	public static Route gooSimple(Route route) throws IOException{
+		String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
+		String req = "https://maps.googleapis.com/maps/api/directions/json?origin="+route.orig.lat+","+route.orig.lon+"&destination="+route.dest.lat+","+route.dest.lon+"&departure_time=1532966400&key=" + key;
+		String res = readReq(req);
+		JSONObject json = new JSONObject(res);
+		JSONArray legs = json.getJSONArray("routes").getJSONObject(0).getJSONArray("legs");
+		int time = legs.getJSONObject(0).getJSONObject("duration").getInt("value");
+		int dis = legs.getJSONObject(0).getJSONObject("distance").getInt("value");
+		route.gTime = time*1000;
+		route.gDis = dis;
+		route.format();
+		return route;
+	}
+	
+	public static Route goo(Route route) throws IOException{
 			
 			String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
 			String req = "https://maps.googleapis.com/maps/api/directions/json?origin="+route.orig.lat+","+route.orig.lon+"&destination="+route.dest.lat+","+route.dest.lon+"&departure_time=1532966400&waypoints=";
