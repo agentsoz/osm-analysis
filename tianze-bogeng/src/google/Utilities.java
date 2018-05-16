@@ -4,202 +4,187 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Scanner;
+
+import org.json.JSONObject;
 
 import model.*;
 
 public class Utilities {
 
-	public static void recordCoor(Route route){
-		try {
-			FileWriter fw = new FileWriter("co.txt");
-			for(Node n : route.nodes){
-				fw.write(n.lat+","+n.lon+"\n");
-			}
-			fw.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
-	public static void analyseRoutesTimePer(ArrayList<Route> routes, double threshold){
 
-		int id = 1;
-		Iterator<Route> ite = routes.iterator();
+	public static void analyseTime(ArrayList<Route> routes, double threshold){
+	
+		String type;
+		if(threshold < 1)
+			type = "per";
+		else
+			type = "hr";
 		
 		//Store the problem ones
+		int id = 1;
+		Iterator<Route> ite = routes.iterator();
 		ArrayList<Route> record = new ArrayList<Route>();
 		while(ite.hasNext()){
 			Route curr = ite.next();
-			if(curr.timeDif >= threshold){
-				record.add(curr);
-			}
-			
-		}
-		
-		//Both write them into file and print them to user's view .
-		if(record.size()==0)
-			System.out.println("No result. Please consider changing some of your arguments.");
-		else{
-			System.out.println("\n-----------------------------Results that exceed threshold------------------------------\n");
-			System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff Ratio");
-			System.out.println();
-			for(Route route : record){
-				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,route.timeDif);
-				System.out.println();
-			}
-			System.out.println("\nWriting data into files...");
-			writeToFile(record);
-			System.out.println("Data is stored in google.csv and osm.csv.");
-		}
-	}
-	
-	public static void analyseRoutesTimeMin(ArrayList<Route> routes, double threshold){
-		int id = 1;
-		Iterator<Route> ite = routes.iterator();
-		
-		//Store the problem ones
-		ArrayList<Route> record = new ArrayList<Route>();
-		while(ite.hasNext()){
-			Route curr = ite.next();
-			if(curr.timeDifMs >= threshold*60000)
-				record.add(curr);
-		}
-		
-		//Both write them into file and print them to user's view .
-		if(record.size()==0)
-			System.out.println("No result. Please consider changing some of your arguments.");
-		else{
-			System.out.println("\n-----------------------------Results that exceed threshold------------------------------\n");
-			System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff (ms)");
-			System.out.println();
-			for(Route route : record){
-				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,route.timeDifMs);
-				System.out.println();
-			}
-			System.out.println("\nWriting data into files...");
-			writeToFile(record);
-			System.out.println("Data is stored in google.csv and osm.csv.");		}
-	}
-	
-	public static void analyseRoutesDistPer(ArrayList<Route> routes, double threshold){
-	
-			int id = 1;
-			Iterator<Route> ite = routes.iterator();
-			
-			//Store the problem ones
-			ArrayList<Route> record = new ArrayList<Route>();
-			while(ite.hasNext()){
-				Route curr = ite.next();
-				if(curr.disDif >= threshold)
+			if(type == "per"){
+				if(curr.timeDif > threshold)
 					record.add(curr);
 			}
+			else if(type == "hr")
+				if(curr.timeDifMs > threshold*60*60*1000)
+					record.add(curr);
 			
-			//Both write them into file and print them to user's view .
-			if(record.size()==0)
-				System.out.println("No result. Please consider changing some of your arguments.");
-			else{
-				System.out.println("\n-----------------------------Results that exceed threshold------------------------------\n");
-				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Dist Diff Ratio");
-				System.out.println();
-				for(Route route : record){
-					
-					System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDif);
-					System.out.println();
-				}
-				System.out.println("\nWriting data into files...");
-				writeToFile(record);
-				System.out.println("Data is stored in google.csv and osm.csv.");			}
-	}
-	
-	public static void analyseRoutesDistKm(ArrayList<Route> routes, double threshold){
-		
-		int id = 1;
-		Iterator<Route> ite = routes.iterator();
-		
-		//Store the problem ones
-		ArrayList<Route> record = new ArrayList<Route>();
-		while(ite.hasNext()){
-			Route curr = ite.next();
-			if(curr.disDifM >= threshold*1000)
-				record.add(curr);
 		}
 		
 		//Both write them into file and print them to user's view .
+		if(record.size() == 0)
+		
+			System.out.println("No result. Please consider changing some of your arguments.");
+		
+		else{
+			
+			System.out.println("\n-----------------------------Results that exceed threshold------------------------------\n");
+			if(type == "per")
+				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff Ratio");
+			else if(type == "hr")
+				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff (ms)");
+
+			System.out.println();
+			for(Route route : record){
+				if(type == "per")
+					System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,route.timeDif);
+				else if(type == "hr")
+					System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,route.timeDifMs);
+
+					System.out.println();
+			}
+			
+			Scanner scan  = new Scanner(System.in);
+	
+			System.out.println("\nPlease enter the path where you want to store the OSM routes data: ");
+			String input  = scan.nextLine();
+			System.out.println("Stroing data...");
+			storeData(record,input,'o');
+			System.out.println("Please enter the path where you want to store the Google routes data: ");
+			input  = scan.nextLine();
+			System.out.println("Stroing data...");
+			storeData(record,input,'g');
+			scan.close();
+		}
+	}
+	
+	
+	public static void analyseDist(ArrayList<Route> routes, double threshold){
+	
+		// Tell if user wants to view difference percent or only km difference.
+		String type;
+		if(threshold < 1)
+			type = "per";
+		else
+			type = "km";
+		
+		// Store the problem ones into ArrayList.
+		int id = 1;
+		Iterator<Route> ite = routes.iterator();
+		ArrayList<Route> record = new ArrayList<Route>();
+		while(ite.hasNext()){
+			Route curr = ite.next();
+			if(type == "per"){
+				if(curr.disDif > threshold)
+					record.add(curr);
+			}
+			else if(type == "km")
+				if(curr.disDifM > threshold * 1000)
+					record.add(curr);
+		}
+		
+		// Print problem ones.
 		if(record.size()==0)
 			System.out.println("No result. Please consider changing some of your arguments.");
 		else{
 			System.out.println("\n-----------------------------Results that exceed threshold------------------------------\n");
-			System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Dist Diff (m)");
-			System.out.println();
-			for(Route route : record){
-				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDifM);
+			
+			if(type == "per")
+				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Dist Diff Ratio");
+			else if(type == "km")
+				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Dist Diff (m)");
+
 				System.out.println();
+				for(Route route : record){
+					if(type == "per")
+						System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDif);
+					else if(type == "km")
+						System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDifM);
+	
+					System.out.println();
+				}
+				
+				Scanner scan  = new Scanner(System.in);
+		
+				System.out.println("\nPlease enter the path where you want to store the OSM data: ");
+				String input  = scan.nextLine();
+				System.out.println("Stroing data...");
+				storeData(record,input,'o');
+				System.out.println("Please enter the path where you want to store the Google data: ");
+				input = scan.nextLine();
+				System.out.println("Stroing data...");
+				storeData(record,input,'g');
+				scan.close();
 			}
-			System.out.println("\nWriting data into files...");
-			writeToFile(record);
-			System.out.println("Data is stored in google.csv and osm.csv.");		}
 	}
 	
-	
-	// Input is like : 35,140/23,25;56,150/24,28;35,140/23,25.... (lat/lon,lat/lon;lat/lon,lat/lon;...)
+	// Input format JSON: {routes:[{ori:{lat:,lon:},dest:{lat:,lon:}}]}
 
-	public static ArrayList<Route> parseListOfCoor(String input){
-
+	public static ArrayList<Route> parseJsonCoorList(String input){
+		
+		Node ori = new Node();
+		Node dest = new Node();
 		ArrayList<Route> routes = new ArrayList<Route>();
-		
-		StringTokenizer stoken1 = new StringTokenizer(input,";");
-		
-		//Handle each "ori/dest" pair
-		while(stoken1.hasMoreTokens()){
-			// coor = 35,140/23,25 
-			String coor = stoken1.nextToken();
-			Node ori = new Node();
-			Node dest = new Node();
-			StringTokenizer stoken2 = new StringTokenizer(coor,"/");
-	
-			// n1&n2 = 35,140 
-			String n1 = stoken2.nextToken();
-			String n2 = stoken2.nextToken();
-			StringTokenizer stoken3 = new StringTokenizer(n1,",");
-			ori.lat = stoken3.nextToken();
-			ori.lon = stoken3.nextToken();
-			StringTokenizer stoken4 = new StringTokenizer(n2,",");
-			dest.lat = stoken4.nextToken();
-			dest.lon = stoken4.nextToken();
-			
+		JSONObject list = new JSONObject(input);
+		for(int i = 0; i < list.getJSONArray("routes").length(); i++){
+			double lat1,lat2,lon1,lon2;
+			lat1 = list.getJSONArray("routes").getJSONObject(i).getJSONObject("ori").getDouble("lat");
+			lon1 = list.getJSONArray("routes").getJSONObject(i).getJSONObject("ori").getDouble("lon");
+			lat2 = list.getJSONArray("routes").getJSONObject(i).getJSONObject("dest").getDouble("lat");
+			lon2 = list.getJSONArray("routes").getJSONObject(i).getJSONObject("dest").getDouble("lon");
+
+			ori.lat = Double.toString(lat1);
+			ori.lon = Double.toString(lon1);
+			dest.lat = Double.toString(lat2);
+			dest.lon = Double.toString(lon2);
 			try {
 				Route route = Sender.goo(Sender.osm(ori, dest));
 				routes.add(route);
 				System.out.println("Generated: "+route.orig.lat+","+route.orig.lon+"/"+route.dest.lat+","+route.dest.lon);;
 			} catch (IOException e) {
-				System.out.println("Failed to generate route: "+coor);
+				System.out.println("Failed to generate one route.");
 			}
 		}
-		
 		return routes;
 	}
 	
-	
-	
-	public static void writeToFile(ArrayList<Route> record){
+	public static void storeData(ArrayList<Route> record,String path,char website){
 		
 		try {
-			FileWriter gWriter = new FileWriter("google.csv");
-			FileWriter oWriter = new FileWriter("osm.csv");
-
-			gWriter.write("google.csv\n-----\n");
-			oWriter.write("osm.csv\n-----\n");
+			
+			FileWriter writer= new FileWriter(path);
+			
+			if(website == 'o')
+				writer.write("google.csv\n-----\n");
+			else if(website == 'g')
+				writer.write("osm.csv\n-----\n");
 
 			Iterator<Route> iterator = record.iterator();
 			int id = 0;
 			while(iterator.hasNext()){
 				id ++;
 				Route curRoute = iterator.next();
-				gWriter.write("route"+id+","+curRoute.orig.lat+","+curRoute.orig.lon+","+curRoute.dest.lat+","+curRoute.dest.lon+","+curRoute.gTime+"s,"+curRoute.gDis+"m\n");
-				oWriter.write("route"+id+","+curRoute.orig.lat+","+curRoute.orig.lon+","+curRoute.dest.lat+","+curRoute.dest.lon+","+curRoute.oTime+"s,"+curRoute.oDis+"m\n");
+				if(website == 'g')
+					writer.write("route"+id+","+curRoute.orig.lat+","+curRoute.orig.lon+","+curRoute.dest.lat+","+curRoute.dest.lon+","+curRoute.gTime+"ms,"+curRoute.gDis+"m\n");
+				else if(website == 'o')
+					writer.write("route"+id+","+curRoute.orig.lat+","+curRoute.orig.lon+","+curRoute.dest.lat+","+curRoute.dest.lon+","+curRoute.oTime+"ms,"+curRoute.oDis+"m\n");
 
 				// i1 - first node, i2 - second
 				Iterator<Node> i1 = curRoute.nodes.iterator();
@@ -215,16 +200,17 @@ public class Utilities {
 					// i2 starts from [1]
 					second = i2.next();
 					Route sec = Sender.gooSimple(Sender.osmSimple(first, second));
-					gWriter.write("route"+id+"."+subId+","+sec.orig.lat+","+sec.orig.lon+","+sec.dest.lat+","+sec.dest.lon+","+sec.gTime+"s,"+sec.gDis+"m\n");
-					oWriter.write("route"+id+"."+subId+","+sec.orig.lat+","+sec.orig.lon+","+sec.dest.lat+","+sec.dest.lon+","+sec.oTime+"s,"+sec.oDis+"m\n");
+					if(website == 'g')
+						writer.write("route"+id+"."+subId+","+sec.orig.lat+","+sec.orig.lon+","+sec.dest.lat+","+sec.dest.lon+","+sec.gTime+"ms,"+sec.gDis+"m\n");
+					else if(website == 'o')	
+						writer.write("route"+id+"."+subId+","+sec.orig.lat+","+sec.orig.lon+","+sec.dest.lat+","+sec.dest.lon+","+sec.oTime+"ms,"+sec.oDis+"m\n");
 				}
-				gWriter.write("\n");
-				oWriter.write("\n");
+				writer.write("\n");
 			}
 			
 			// Close the writers
-			gWriter.close();
-			oWriter.close();
+			writer.close();
+			System.out.println("Storing succeeds.\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -232,6 +218,7 @@ public class Utilities {
 		
 	}
 	
+	//meters
 	public static double distance(Node node1, Node node2){
 		double lat1 = Double.parseDouble(node1.lat);
 		double lon1 = Double.parseDouble(node1.lon);

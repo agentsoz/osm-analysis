@@ -16,11 +16,12 @@ import org.json.JSONObject;
 import model.Node;
 import model.Route;
 
+//https://maps.googleapis.com/maps/api/directions/json?origin=-37.170539,149.0752711&destination=-35.5213982,144.0558473&key=AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I
+//https://graphhopper.com/api/1/route?point=-37.170539,149.0752711&point=-35.5213982,144.0558473&points_encoded=true&key=7bf24aff-c48e-469f-a680-3d6fbe65388e
 
 public class Sender {
 
-	public static Route ranRoute(double radius) throws ClassNotFoundException, SQLException{
-		//Totally random route
+	public static Route ranRoute(double radius){
 		if(radius == 0)
 			return ranRoute();
 		//Random route with origin and radius specified
@@ -44,6 +45,12 @@ public class Sender {
 					return route;
 				}catch(IOException e){
 					continue;
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

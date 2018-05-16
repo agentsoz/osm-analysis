@@ -41,7 +41,7 @@ public class Main {
 		double distPercentDiff = 0;
 		double kmDiff = 0;
 		double timePercentDiff = 0;
-		double hrDiff = 0;
+		double minDiff = 0;
 		boolean distCompare = false;
 		boolean timeCompare = false;
 		
@@ -66,7 +66,7 @@ public class Main {
 					timeCompare = true;
 				}
 				if(args[i].equals("--time-diff-reporting-threshold-hr")){
-					hrDiff = Double.parseDouble(args[i+1]);
+					minDiff = Double.parseDouble(args[i+1])*60;
 					timeCompare = true;
 				}
 			}
@@ -75,39 +75,34 @@ public class Main {
 			ArrayList<Route> routes = new ArrayList<Route>();
 			for(int i = 0; i < num; i++){
 				Route route;
-				try {
-					route = Sender.ranRoute(radius);
-					routes.add(route);
-					
-				} catch (ClassNotFoundException | SQLException e) {
-					e.printStackTrace();
-				}
+				route = Sender.ranRoute(radius);
+				routes.add(route);
 			}
 			
 			//Analyse ALL routes
 			if(distCompare == true){
 				//Default 20%
 				if(distPercentDiff == 0 && kmDiff == 0)
-					Utilities.analyseRoutesDistPer(routes, 0.2);
+					Utilities.analyseDist(routes, 0.2);
 				else if(distPercentDiff != 0)
-					Utilities.analyseRoutesDistPer(routes, distPercentDiff);
+					Utilities.analyseDist(routes, distPercentDiff);
 				else
-					Utilities.analyseRoutesDistKm(routes, kmDiff);
+					Utilities.analyseDist(routes, kmDiff);
 			}
 			else if(timeCompare == true){
-				if(timePercentDiff == 0 && hrDiff == 0)
-					Utilities.analyseRoutesTimePer(routes, 0.2);
+				if(timePercentDiff == 0 && minDiff == 0)
+					Utilities.analyseTime(routes, 0.2);
 				else if(timePercentDiff != 0)
-					Utilities.analyseRoutesTimePer(routes, timePercentDiff);
+					Utilities.analyseTime(routes, timePercentDiff);
 				else
-					Utilities.analyseRoutesTimeMin(routes, hrDiff);
+					Utilities.analyseTime(routes, minDiff);
 			}
 		}
 	
 		
 		//Choice 2: User input a list of ori/dest
 		else if(args[0].equals("--list-of-origin/dest")){
-			ArrayList<Route> routes = Utilities.parseListOfCoor(args[1]);
+			ArrayList<Route> routes = Utilities.parseJsonCoorList(args[1]);
 			
 			for(int i = 2; i < args.length; i++){
 				if(args[i].equals("--dist-diff-reporting-threshold-percent")){
@@ -119,11 +114,11 @@ public class Main {
 					distCompare = true;
 				}
 				if(args[i].equals("--time-diff-reporting-threshold-percent")){
-					timePercentDiff = Double.parseDouble(args[i+1]);
+					timePercentDiff = Double.parseDouble(args[i+1])/100;
 					timeCompare = true;
 				}
 				if(args[i].equals("--time-diff-reporting-threshold-hr")){
-					hrDiff = Double.parseDouble(args[i+1]);
+					minDiff = Double.parseDouble(args[i+1])*60;
 					timeCompare = true;
 				}
 			}
@@ -132,19 +127,19 @@ public class Main {
 			if(distCompare == true){
 				//Default 20%
 				if(distPercentDiff == 0 && kmDiff == 0)
-					Utilities.analyseRoutesDistPer(routes, 0.2);
+					Utilities.analyseDist(routes, 0.2);
 				else if(distPercentDiff != 0)
-					Utilities.analyseRoutesDistPer(routes, distPercentDiff);
+					Utilities.analyseDist(routes, distPercentDiff);
 				else
-					Utilities.analyseRoutesDistKm(routes, kmDiff);
+					Utilities.analyseDist(routes, kmDiff);
 			}
 			else if(timeCompare == true){
-				if(timePercentDiff == 0 && hrDiff == 0)
-					Utilities.analyseRoutesTimePer(routes, 0.2);
+				if(timePercentDiff == 0 && minDiff == 0)
+					Utilities.analyseTime(routes, 0.2);
 				else if(timePercentDiff != 0)
-					Utilities.analyseRoutesTimePer(routes, timePercentDiff);
+					Utilities.analyseTime(routes, timePercentDiff);
 				else
-					Utilities.analyseRoutesTimeMin(routes, hrDiff);
+					Utilities.analyseTime(routes, minDiff);
 			}
 		}
 	}
