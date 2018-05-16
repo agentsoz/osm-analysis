@@ -19,10 +19,8 @@ public class LOGReadWrite {
 //		this.filepath = filepath;
 //	}
 
-	public static void write(String content, String filepath) {
-		
-//		file = new File(filepath);
-		
+	public static void write(String filepath, String content) 
+	{	
 		try (FileWriter fw = new FileWriter(filepath,true);
 			 BufferedWriter bw = new BufferedWriter(fw);
 			 PrintWriter out =new PrintWriter(bw))

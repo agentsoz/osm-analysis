@@ -15,7 +15,7 @@ public class Main {
 	private static BasicProblemHandler handler;
 	static String dbUrl;
 	static Options options;
-	static String file_path;
+	public static String file_path;
 	static String type;
 	
 	/**
@@ -27,12 +27,8 @@ public class Main {
 	{
 		parse(args);
 		
-		if(file_path != null) 
-		{
-			handler.setFilePath(file_path);
-		}
 		if(handler != null) 
-		{
+		{	
 			handler.handleProblem();
 		}
 	}
@@ -46,6 +42,7 @@ public class Main {
 	{	
 		// create command line parser
 		CommandLineParser parser = new DefaultParser();
+		CommandLine cmd;
 		
 		// create the options
 		options = new Options();
@@ -58,14 +55,19 @@ public class Main {
 		options.addOption("opt1", "get-ways-speed-change", true, "get two adjacent way speed different greater than input value");
 		options.addOption("opt2", "get-ways-relation-speed-change", false, "get ways' max_speed exceed its relation");
 		
-		
 		try 
 		{	
-			CommandLine cmd = parser.parse(options, args);
-			
+			cmd = parser.parse(options, args);
+	
+			// run main without command line arguments
+			// if return an empty array of the processed options 
+			if(cmd.getOptions().length == 0) 
+			{
+				help();
+			}
 			if(cmd.hasOption("f")) 
 			{
-				dbUrl = cmd.getOptionValue("f");
+				dbUrl = cmd.getOptionValue("f");	
 			}
 			if(cmd.hasOption("w")) 
 			{
@@ -91,11 +93,6 @@ public class Main {
 			{
 				handler = new RelationSpeedProblemHandler(dbUrl);
 			}
-//			else 
-//			{
-//				System.out.println("failed to parse command line arguments");
-//				help();
-//			}
 		}
 		catch(ParseException e)
 		{

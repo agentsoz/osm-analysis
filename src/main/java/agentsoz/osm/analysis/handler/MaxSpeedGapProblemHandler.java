@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import agentsoz.osm.analysis.app.Main;
 import agentsoz.osm.analysis.models.Way;
 
 /*
@@ -124,8 +125,7 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 		String way_j_f;
 		String way_j_l;
 
-		String all = "";
-		System.out.println();
+		String content = "";
 		
 		for(int i=0;i<ways.size();i++) 
 		{
@@ -152,24 +152,12 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 						// way_maxspeed: id1=speed1 id2=speed2 diff=speed3
 						String output = "way_maxspeed_diff: " + "way_" + ways.get(i).getId() + "=" + ways.get(i).getSpeed()
 						         + " " + "way_" + ways.get(j).getId() + "=" + ways.get(j).getSpeed() + " diff=" + actual_gap;	
-						all = all + "\n" + output;
+						content = content + "\r\n" + output;
 					}
 				}
 			}
 		}
-		if(writeFile == false) 
-		{
-			System.out.print(all);
-		}
-		if(writeFile == true)
-		{
-			writeToFile(path,all);
-		}
+		writeToFile(content);
 	}
 
-	@Override
-	public void writeToFile(String path, String content) 
-	{
-		LOGReadWrite.write(content, path);
-	}
 }

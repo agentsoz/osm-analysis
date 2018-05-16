@@ -22,7 +22,6 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 		url = "jdbc:sqlite:" + databaseUrl;
 	}
 	
-	
 	public void search(String attName) {
 		
 		String _name = "";
@@ -87,5 +86,11 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 		stm1.close();
 		
 		return IDs;
+	}
+
+	@Override
+	public void handleProblem() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,0 +1,4 @@
+way_relation_speed_diff: way_37890937=70 relation_1778471=40
+way_relation_speed_diff: way_168809687=70 relation_1778471=40
+way_relation_speed_diff: way_101331057=70 relation_1778471=40
+way_relation_speed_diff: way_168809686=70 relation_1778471=40

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import agentsoz.osm.analysis.app.Main;
+
 public abstract class BasicProblemHandler {
 
 	boolean writeFile;
@@ -36,13 +38,21 @@ public abstract class BasicProblemHandler {
 		return conn;
 	}
 	
-	public void setFilePath(String path) 
+	public void writeToFile(String content) 
 	{
-		writeFile = true;
-		this.path = path;
+		if(Main.file_path == null) 
+		{
+			System.out.print(content);
+		}
+		if(Main.file_path != null)
+		{
+			String[] lines = content.split("\\r?\\n");
+			for(String line : lines) 
+			{
+				LOGReadWrite.write(Main.file_path, line);
+			}
+		}
 	}
-	
-	public abstract void writeToFile(String path, String content);
 	
 	public abstract void handleProblem();
 

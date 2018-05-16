@@ -10,7 +10,7 @@ import java.util.Timer;
 
 import agentsoz.osm.analysis.models.Relation;
 import agentsoz.osm.analysis.models.Way;
-//import agentsoz.osm.analysis.handler.*;
+
 
 public class RelationSpeedProblemHandler extends BasicProblemHandler{
 
@@ -28,6 +28,8 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 	{
 		conn = super.connect(url);
 		List<Relation> ls_relation = getRelation();
+	
+		String content = "";
 		
 		for(Relation relation : ls_relation) 
 		{
@@ -41,10 +43,10 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 				{
 					if(relation.getSpeed() < way.getSpeed()) 	
 					{
-						System.out.println("Mark relation between way " + way.getId() 
-		                        + " and Relation " + relation.getId() + " as a potantial problem");
-		                System.out.println("way maxspeed is " + way.getSpeed() + ", "
-		                		+ " and relation maxspeed is " + relation.getSpeed());
+						String output = "way_relation_speed_diff: way_" + way.getId() + "=" + way.getSpeed() 
+						            + " relation_" +  relation.getId() + "=" + relation.getSpeed();
+					
+						content = content + output + "\r\n";
 					}
 				}
 			}
@@ -57,6 +59,7 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 		{
 			e.printStackTrace();
 		}
+		writeToFile(content);
 	}
 	
 
@@ -166,11 +169,5 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 				System.out.println(e.getMessage());
 		}
 		return way;
-	}
-
-	@Override
-	public void writeToFile(String path, String content) {
-		// TODO Auto-generated method stub
-		
 	}
 } 
