@@ -33,7 +33,7 @@ public class Utilities {
 					record.add(curr);
 			}
 			else if(type == "hr")
-				if(curr.timeDifMs > threshold*60*60*1000)
+				if(curr.timeDifMs > threshold*60*1000)
 					record.add(curr);
 			
 		}
@@ -47,14 +47,14 @@ public class Utilities {
 			
 			System.out.println("\n-----------------------------Results that exceed threshold------------------------------\n");
 			if(type == "per")
-				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff Ratio");
+				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff Ratio (%)");
 			else if(type == "hr")
 				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff (ms)");
 
 			System.out.println();
 			for(Route route : record){
 				if(type == "per")
-					System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,route.timeDif);
+					System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,route.timeDif*100);
 				else if(type == "hr")
 					System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,route.timeDifMs);
 
@@ -63,13 +63,17 @@ public class Utilities {
 			
 			Scanner scan  = new Scanner(System.in);
 	
-			System.out.println("\nPlease enter the path where you want to store the OSM routes data: ");
+			System.out.println("\nPlease enter the path where you want to store the OSM routes data (enter q to quit): ");
 			String input  = scan.nextLine();
+			if(input.equals("q"))
+				System.exit(0);
 			System.out.println("Stroing data...");
 			storeData(record,input,'o');
-			System.out.println("Please enter the path where you want to store the Google routes data: ");
+			System.out.println("Please enter the path where you want to store the Google routes data: (enter q to quit)");
 			input  = scan.nextLine();
-			System.out.println("Stroing data...");
+			if(input.equals("q"))
+				System.exit(1);
+			System.out.println("Storing data...");
 			storeData(record,input,'g');
 			scan.close();
 		}
@@ -107,14 +111,14 @@ public class Utilities {
 			System.out.println("\n-----------------------------Results that exceed threshold------------------------------\n");
 			
 			if(type == "per")
-				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Dist Diff Ratio");
+				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Dist Diff Ratio (%)");
 			else if(type == "km")
 				System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s","No.","Origin","Destination","OSM(m)","Google(m)","Dist Diff (m)");
 
 				System.out.println();
 				for(Route route : record){
 					if(type == "per")
-						System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDif);
+						System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDif*100);
 					else if(type == "km")
 						System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oDis,route.gDis,route.disDifM);
 	
@@ -123,13 +127,17 @@ public class Utilities {
 				
 				Scanner scan  = new Scanner(System.in);
 		
-				System.out.println("\nPlease enter the path where you want to store the OSM data: ");
+				System.out.println("\nPlease enter the path where you want to store the OSM data (enter q to quit): ");
 				String input  = scan.nextLine();
+				if(input.equals("q"))
+					System.exit(0);
 				System.out.println("Stroing data...");
 				storeData(record,input,'o');
-				System.out.println("Please enter the path where you want to store the Google data: ");
+				System.out.println("Please enter the path where you want to store the Google data (enter q to quit): ");
 				input = scan.nextLine();
-				System.out.println("Stroing data...");
+				if(input.equals("q"))
+					System.exit(0);
+				System.out.println("Storing data...");
 				storeData(record,input,'g');
 				scan.close();
 			}

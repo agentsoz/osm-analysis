@@ -1,4 +1,3 @@
-
 package model;
 
 import java.text.DecimalFormat;
