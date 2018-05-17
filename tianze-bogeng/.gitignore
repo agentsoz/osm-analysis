@@ -1,5 +1,6 @@
 *.db
 goo.txt
-*.xml
+way.xml
+relation.xml
 Store.java
 *.class
