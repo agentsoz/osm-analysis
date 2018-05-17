@@ -1,3 +1,7 @@
-/google/
-/model/
+*.db
+goo.txt
+way.xml
+relation.xml
+Store.java
+*.class
 /project/
