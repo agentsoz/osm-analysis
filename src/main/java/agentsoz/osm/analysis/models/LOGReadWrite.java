@@ -1,4 +1,4 @@
-package agentsoz.osm.analysis.handler;
+package agentsoz.osm.analysis.models;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,9 +15,6 @@ public class LOGReadWrite {
 	
 	private File file;
 	
-//	public LOGReadWrite(String filepath) {
-//		this.filepath = filepath;
-//	}
 
 	public static void write(String filepath, String content) 
 	{	

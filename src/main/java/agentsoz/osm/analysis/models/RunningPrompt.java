@@ -1,4 +1,4 @@
-package agentsoz.osm.analysis.handler;
+package agentsoz.osm.analysis.models;
 
 import java.util.TimerTask;
 

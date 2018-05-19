@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.Timer;
 
 import agentsoz.osm.analysis.app.Main;
+import agentsoz.osm.analysis.models.LOGReadWrite;
+import agentsoz.osm.analysis.models.RunningPrompt;
 
 public abstract class BasicProblemHandler {
 

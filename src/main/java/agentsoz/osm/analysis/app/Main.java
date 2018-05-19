@@ -47,10 +47,11 @@ public class Main {
 		// create the options
 		options = new Options();
 		
-		options.addOption("osm", "write-to-database", true, "Write given osm file into database");
+		options.addOption("osm", "write-osm-to-database", true, "Write given osm file into database");
 		options.addOption("f", "in-file", true,  "Input database");
 		options.addOption("w", "out-file", true, "Write output to file");
-		options.addOption("s", "search-missing", true, "Search missing attribute");
+		options.addOption("s", "search-missing", true, "Search missing attribute of certain type");
+		options.addOption("v", "value", true, "value of searching operation");
 		options.addOption("way", false, "choose type way");
 		options.addOption("relation", true, "choose type relation");
 		options.addOption("opt1", "get-ways-speed-change", true, "get two adjacent way speed difference greater than input value");
@@ -87,11 +88,18 @@ public class Main {
 			{
 				type = "ways";
 			} 
+			// search missing value : get type of the value
 			if(cmd.hasOption("s")) 
 			{
-				String attribute = cmd.getOptionValue("s");
-//				SearchMissingAttribute search = new SearchMissingAttribute(type); 
-//				search.search(attribute);
+				String type = cmd.getOptionValue("s");
+				SearchMissingAttribute.choice = type;
+			}
+			// search missing value : get value 
+			if(cmd.hasOption("v")) 
+			{
+				String attribute = cmd.getOptionValue("v");
+				SearchMissingAttribute search = new SearchMissingAttribute(dbUrl); 
+				search.search(attribute);
 			}
 			if(cmd.hasOption("opt1")) 
 			{
