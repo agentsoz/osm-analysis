@@ -38,13 +38,13 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 			
 			if(choice.equals("node")) {
 				_name = "node_id";
-				sql = "SELECT '"+_name+"' FROM nodes_tags WHERE tag_key='"+attName+"'";
+				sql = "SELECT node_id FROM nodes_tags WHERE tag_key='"+attName+"'";
 			}else if(choice.equals("way")) {
 				_name = "way_id";
-				sql = "SELECT '"+_name+"' FROM ways_tags WHERE tag_key='"+attName+"'";
+				sql = "SELECT way_id FROM ways_tags WHERE tag_key='"+attName+"'";
 			}else if(choice.equals("relation")) {
 				_name = "relation_id";
-				sql = "SELECT '"+_name+"' FROM relations_tags WHERE tag_key='"+attName+"'";
+				sql = "SELECT relation_id FROM relations_tags WHERE tag_key='"+attName+"'";
 			}else {
 				System.out.println("incorrect input, please input 'node' or 'way' or 'relation'.");
 				System.exit(0);
