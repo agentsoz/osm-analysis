@@ -1,4 +1,5 @@
 package agentsoz.osm.analysis.handler;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,33 +8,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 import agentsoz.osm.analysis.app.Main;
 import agentsoz.osm.analysis.interfaces.InsertData;
 
-public class DataBaseHandler implements InsertData {
-	
-	private static DataBaseHandler instance;
-	static final Logger LOG = Logger.getLogger(DataBaseHandler.class.getName());
-	
-	public static DataBaseHandler getInstance() 
-	{	
-		if(instance == null) {
-			instance = new DataBaseHandler();
-		}
-		
-		return instance;
-	}
+public class DataBaseHandler extends BasicProblemHandler implements InsertData {
 	
 	@Override
 	public void insert(Statement stm, Connection con) 
 	{
-		/*
-		 * change the path because the data.osm is too big, thus it is unnecessary to upload
-		 * */
-		String path = Main.OSM_FILE;
-		File filename = new File(path);
+		// set path of the new generated database
+		File filename = new File(Main.OSM_FILE);
+		
 		InputStreamReader reader;
 		try {
 			reader = new InputStreamReader(new FileInputStream(filename));
@@ -139,44 +125,36 @@ public class DataBaseHandler implements InsertData {
 		}
 	}
 	
-	public void createTables() 
+	@Override
+	public void handleProblem() 
 	{
 		Connection con = null;	
 		Statement stm = null;
+		
+		//set database URL with input from user
+		String url = "jdbc:sqlite:"+ Main.file_path;
+		
+		super.running_timer();
 
 		try {
 			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:osm.db");
+			con = DriverManager.getConnection(url);
 			stm = con.createStatement();
 			con.setAutoCommit(false);
 			
 			createBasicTable(stm, con);
-			DataBaseHandler.getInstance().insert(stm,con);
-			createProblemTable(stm, con);
+		    insert(stm,con);
 
 			con.setAutoCommit(true);
 			stm.close();
 			con.close();
 		} catch (ClassNotFoundException e) {
-			
-			LOG.severe("ClassNotFoundException");
+		
 			e.printStackTrace();
 		} catch (SQLException e) {
 			
-			LOG.severe("SQLException");
 			e.printStackTrace();
-		} 
-	}
-		
-	private static void createProblemTable(Statement stm, Connection con) throws SQLException 
-	{
-		String maxspeed = "CREATE TABLE IF NOT EXISTS maxspeed(ID_FIRST INT NOT NULL, ID_SECOND INT NOT NULL)";
-		String maxspeedRW = "CREATE TABLE IF NOT EXISTS maxspeed(relation_id TEXT NOT NULL, way_id TEXT NOT NULL)";
-		String routeRW = "CREATE TABLE IF NOT EXISTS routeRW(relation_id TEXT NOT NULL, way_id TEXT NOT NULL)";
-		
-		stm.executeUpdate(routeRW);
-		stm.executeUpdate(maxspeed);
-		stm.executeUpdate(maxspeedRW);
+		} finally {super.stop_timer();}
 	}
 
 	private static void createBasicTable(Statement stm, Connection con) throws SQLException

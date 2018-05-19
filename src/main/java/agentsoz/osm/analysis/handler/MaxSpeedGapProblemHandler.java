@@ -6,9 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
-import agentsoz.osm.analysis.app.Main;
 import agentsoz.osm.analysis.models.Way;
 
 /*
@@ -29,7 +27,6 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 	Connection con;
 	Statement stm; 
 	Statement stm1;
-	Timer timer;
 	
 	public MaxSpeedGapProblemHandler(String databaseUrl, int speed)
 	{
@@ -40,7 +37,7 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 	@Override
 	public void handleProblem()
 	{		
-		running();
+		super.running_timer();
 		
 		try 
 		{
@@ -63,8 +60,7 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 				System.out.println("no match found");
 			}
 
-			timer.cancel();
-			timer.purge();
+			super.stop_timer();
 			
 			try 
 			{
@@ -76,13 +72,6 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 			}
 		}
 	}
-	
-	public void running() 
-	{
-		timer = new Timer();
-		timer.schedule(new RunningPrompt(), 0, 1*1000);
-	}
-	
 	
 	private List<Way> getAllWaysHasMaxSpeed() throws SQLException 
 	{

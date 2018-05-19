@@ -47,12 +47,13 @@ public class Main {
 		// create the options
 		options = new Options();
 		
-		options.addOption("f", "file", true,  "Here you can set database path");
-		options.addOption("w", "out-file", true, "Write file to a text file");
+		options.addOption("osm", "write-to-database", true, "Write given osm file into database");
+		options.addOption("f", "in-file", true,  "Input database");
+		options.addOption("w", "out-file", true, "Write output to file");
 		options.addOption("s", "search-missing", true, "Search missing attribute");
 		options.addOption("way", false, "choose type way");
 		options.addOption("relation", true, "choose type relation");
-		options.addOption("opt1", "get-ways-speed-change", true, "get two adjacent way speed different greater than input value");
+		options.addOption("opt1", "get-ways-speed-change", true, "get two adjacent way speed difference greater than input value");
 		options.addOption("opt2", "get-ways-relation-speed-change", false, "get ways' max_speed exceed its relation");
 		
 		try 
@@ -65,10 +66,18 @@ public class Main {
 			{
 				help();
 			}
+			// get input osm file from user
+			if(cmd.hasOption("osm")) 
+			{
+				OSM_FILE = cmd.getOptionValue("osm");
+				handler = new DataBaseHandler();
+			}
+			// get input database file from user
 			if(cmd.hasOption("f")) 
 			{
 				dbUrl = cmd.getOptionValue("f");	
 			}
+			// write file
 			if(cmd.hasOption("w")) 
 			{
 				String path = cmd.getOptionValue("w");

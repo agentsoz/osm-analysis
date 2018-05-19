@@ -3,6 +3,7 @@ package agentsoz.osm.analysis.handler;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Timer;
 
 import agentsoz.osm.analysis.app.Main;
 
@@ -11,11 +12,25 @@ public abstract class BasicProblemHandler {
 	boolean writeFile;
 	boolean isFound;
 	String path;
+	Timer timer;
 	
 	public BasicProblemHandler()
 	{
 		writeFile = false;
 		isFound = false;
+	}
+	
+	// program running indicator
+	public void running_timer() 
+	{
+		timer = new Timer();
+		timer.schedule(new RunningPrompt(), 0, 1*1000);
+	}
+	
+	public void stop_timer() 
+	{
+		timer.cancel();
+		timer.purge();
 	}
 	
 	/**
