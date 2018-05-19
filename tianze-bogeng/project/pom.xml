@@ -1,0 +1,70 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>osm.analysis.app</groupId>
+  <artifactId>project</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>project</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+<!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.21.0</version>
+		</dependency>	
+  </dependencies>
+<build>
+	<plugins>
+		<plugin>
+            <groupId>org.apache.maven.plugins</groupId>		
+			<artifactId>maven-assembly-plugin</artifactId>
+			<executions>
+			    <execution>
+				   <goals>
+					  <goal>single</goal>
+				   </goals>
+				   <configuration>
+				   <archive>
+					<manifest>
+						<mainClass>osm.analysis.google.Main</mainClass>
+					</manifest>
+			    	</archive>
+				   <descriptorRefs>
+					  <descriptorRef>jar-with-dependencies</descriptorRef>
+				   </descriptorRefs>
+			</configuration>
+			    </execution>
+			</executions>
+		</plugin>
+
+		<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>2.3.2</version>
+		<configuration>
+			<source>1.8</source>
+			<target>1.8</target>
+			<showWarnings>false</showWarnings>
+			<showDeprecation>false</showDeprecation>
+			<encoding>UTF-8</encoding>
+			<!-- configure initial and maximal memory for compiling -->
+			<fork>true</fork>
+			<meminitial>128m</meminitial>
+			<maxmem>512m</maxmem>
+			<compilerArguments>
+				<Xmaxwarns>4000</Xmaxwarns>
+				<Xmaxerrs>100</Xmaxerrs>
+			</compilerArguments>
+		</configuration>
+	</plugin>
+	</plugins>
+	</build>
+</project>

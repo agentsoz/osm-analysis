@@ -1,4 +1,4 @@
-package google;
+package osm.analysis.google;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,10 +9,9 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import org.json.JSONObject;
-
-import model.Node;
-import model.Route;
+import osm.analysis.model.Node;
+import osm.analysis.model.Route;
+import osm.org.json.JSONObject;
 
 public class Test {
 

@@ -1,11 +1,10 @@
-Enter /project and input "mvn clean install"
-Then input "java -cp target/project-1.0-SNAPSHOT.jar osm.analysis.google Main" plus arguments below
+Commands:
 
 1.To input a list of origin/dest:
---list-of-origin/dest   (JSON format)
+--list-of-origin/dest   (JSON)
 
-2.To generate a number of random routes:
---generate-random-origins (integer number)
+2.To generate random routes:
+--generate-random-origins (integer)
 --radius-of-dest (unit: km)
 
 --dist-diff-reporting-threshold-percent  (DEFAULT: ...)

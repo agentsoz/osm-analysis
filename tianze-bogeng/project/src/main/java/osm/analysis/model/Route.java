@@ -1,5 +1,5 @@
 
-package model;
+package osm.analysis.model;
 
 import java.text.DecimalFormat;
 import java.util.*;

@@ -1,4 +1,4 @@
-package google;
+package osm.analysis.google;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -9,11 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import model.Node;
-import model.Route;
+import osm.analysis.model.Node;
+import osm.analysis.model.Route;
+import osm.org.json.JSONArray;
+import osm.org.json.JSONObject;
 
 //https://maps.googleapis.com/maps/api/directions/json?origin=-37.170539,149.0752711&destination=-35.5213982,144.0558473&key=AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I
 //https://graphhopper.com/api/1/route?point=-37.170539,149.0752711&point=-35.5213982,144.0558473&points_encoded=true&key=7bf24aff-c48e-469f-a680-3d6fbe65388e

@@ -1,5 +1,5 @@
 
-package google;
+package osm.analysis.google;
 
 import java.io.IOException;
 import java.sql.*;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import model.*;
+import osm.analysis.model.*;
 
 public class Main {
 

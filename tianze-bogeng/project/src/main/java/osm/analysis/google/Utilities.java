@@ -1,4 +1,4 @@
-package google;
+package osm.analysis.google;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import org.json.JSONObject;
-
-import model.*;
+import osm.analysis.model.*;
+import osm.org.json.JSONObject;
 
 public class Utilities {
 
@@ -234,14 +233,14 @@ public class Utilities {
 		double lon2 = Double.parseDouble(node2.lon);
 		
 		double R = 6371e3; // meters
-		double ¦Õ1 = Math.toRadians(lat1);
-		double ¦Õ2 = Math.toRadians(lat2);
-		double ¦¤¦Õ = Math.toRadians(lat2-lat1);
-		double ¦¤¦Ë = Math.toRadians(lon2-lon1);
+		double o1 = Math.toRadians(lat1);
+		double o2 = Math.toRadians(lat2);
+		double oDiff = Math.toRadians(lat2-lat1);
+		double vDiff = Math.toRadians(lon2-lon1);
 
-		double a = Math.sin(¦¤¦Õ/2) * Math.sin(¦¤¦Õ/2) +
-		        Math.cos(¦Õ1) * Math.cos(¦Õ2) *
-		        Math.sin(¦¤¦Ë/2) * Math.sin(¦¤¦Ë/2);
+		double a = Math.sin(oDiff/2) * Math.sin(oDiff/2) +
+		        Math.cos(o1) * Math.cos(o2) *
+		        Math.sin(vDiff/2) * Math.sin(vDiff/2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
 		double d = R * c;
