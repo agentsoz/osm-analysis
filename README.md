@@ -29,6 +29,7 @@ usage: Menu
 
 Test case example:
 1. run without argument -> usage menu
+2. --write-osm-to-database osm.db -> generate new database osm.db if not exist
 2. --get-ways-relation-speed -file osm.db -> print in console
-3. --get-ways-speed-change 50 -file osm.db -out-file way_speed_change.txt  -> write to text file
+3. --get-ways-speed-change 50 -file osm.db -out-file way_speed_change.txt  -> write results to text file
  
