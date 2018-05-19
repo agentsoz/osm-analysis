@@ -32,4 +32,4 @@ Test case example:
 2. --write-osm-to-database osm.db -> generate new database osm.db if not exist
 2. --get-ways-relation-speed -file osm.db -> print in console
 3. --get-ways-speed-change 50 -file osm.db -out-file way_speed_change.txt  -> write results to text file
- 
+4. --search-missing way -value maxspeed -in-file osm.db  ->  search for way which missing value "maxspeed"
