@@ -36,9 +36,11 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 			con = DriverManager.getConnection(url);
 			stm = con.createStatement();
 			stm1 = con.createStatement();
+
 	
 			setSqlQuery(attName);
-			
+
+			String sql = null;			
 			List<String> IDs = compare();
 			ResultSet res = stm.executeQuery(sql);
 			String temp;
