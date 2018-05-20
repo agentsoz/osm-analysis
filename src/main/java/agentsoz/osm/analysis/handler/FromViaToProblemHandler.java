@@ -6,12 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class FromViaToProblemHandler extends BasicProblemHandler {
-
-	static final Logger LOG = Logger.getLogger(FromViaToProblemHandler.class.getName());
 	
 	int countIssue = 0;
 	
@@ -31,48 +27,52 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		url = "jdbc:sqlite:" + databaseUrl;
 	}
 	
+	void create() throws SQLException
+	{
+		stm = con.createStatement();
+		stm1 = con.createStatement();
+		stm2 = con.createStatement();
+		stm3 = con.createStatement();
+		stm4 = con.createStatement();
+		stm5 = con.createStatement();
+	}
+	
+	void close() throws SQLException 
+	{
+		stm.close();
+		stm1.close();
+		stm2.close();
+		stm3.close();
+		stm4.close();
+		con.close();
+	}
+	
 	@Override
 	public void handleProblem() 
 	{	
 		wayIDs = new ArrayList<>();
 		
-		long begin = 0;
-		long end = 0;
-		
-		try {
+		try 
+		{
 			Class.forName("org.sqlite.JDBC");
 			con = super.connect(url);
-			stm = con.createStatement();
-			stm1 = con.createStatement();
-			stm2 = con.createStatement();
-			stm3 = con.createStatement();
-			stm4 = con.createStatement();
-			stm5 = con.createStatement();
-			
-			begin = System.currentTimeMillis();
-			getRelations();
-			end = System.currentTimeMillis();
-			
-			stm.close();
-			stm1.close();
-			stm2.close();
-			stm3.close();
-			stm4.close();
-			con.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			LOG.log(Level.INFO, "the running time is " + (end - begin) + "ms");
-			LOG.log(Level.INFO, "how many relations have from_via_to problem:" + countIssue);
+	
+			getRelations();	
 		}
-		
-		
+		catch (ClassNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		} 
 	}
 
+	/**
+	 * wayID : list contains all way id
+	 * check from, via, to by calling getMembers(relation_id)
+	 * */
 	private void getRelations() throws SQLException 
 	{
 		String sql_wayID = "SELECT ID FROM ways";
@@ -84,21 +84,11 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		}
 		stm5.close();
 		
-		String sql_size = "SELECT COUNT(ID) AS RelationSize FROM relations";
-		ResultSet res_size = stm.executeQuery(sql_size);
-		int size = res_size.getInt("RelationSize");
-		
 		String sql = "SELECT ID FROM relations";
 		ResultSet res = stm1.executeQuery(sql);
-		int count = 0;
-		int percent = 0;
-		while(res.next()) {
-			count++;
-			if(count >= size/10) {
-				percent = percent + 10;
-				LOG.log(Level.INFO, percent + "% data has been finished");
-				count = 0;
-			}
+
+		while(res.next()) 
+		{	
 			getMembers(res.getInt("ID"));
 		}
 	}
@@ -112,6 +102,8 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		
 		int test = 0;
 		int check = 0;
+		
+		// check from via to with sequence
 		while(res.next())
 		{
 			test++;
@@ -138,7 +130,9 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 
 	private void check(String[] nodes, int relationID) throws SQLException
 	{
-		if(!(nodes[0].equals("") || nodes[1].equals("") || nodes[2].equals(""))) {
+		// if all 3 nodes not null
+		if(!(nodes[0].equals("") || nodes[1].equals("") || nodes[2].equals(""))) 
+		{
 			String sql_from = "SELECT node_id FROM ways_nodes WHERE way_id='"+nodes[0]+"'";
 			ResultSet res_from = stm3.executeQuery(sql_from);
 			String last_node = "";
@@ -159,7 +153,6 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 			if(!(first_node.equals(last_node) && first_node.equals(nodes[1]))) 
 			{
 				countIssue++;
-				LOG.log(Level.INFO, "the relation(" + relationID + ") has from_via_to problem");
 			}
 		}
 		

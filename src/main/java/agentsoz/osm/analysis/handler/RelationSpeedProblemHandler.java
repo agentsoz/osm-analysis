@@ -59,7 +59,7 @@ public class RelationSpeedProblemHandler extends BasicProblemHandler{
 		{
 			e.printStackTrace();
 		}
-		writeToFile(content);
+		writeResult(content);
 	}
 	
 

@@ -14,6 +14,8 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 	Statement stm1;
 	Connection con;
 	private String url;
+	String input;
+	String sql;
 	
 	//choices are 'ways' 'relations' and 'nodes'
 	public static String choice;
@@ -22,69 +24,91 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 	public SearchMissingAttribute(String databaseUrl)
 	{
 		url = "jdbc:sqlite:" + databaseUrl;
+		input = "";
+		sql = null;
 	}
-	
+
 	public void search(String attName) 
 	{	
-		String _name = "";
-		
 		try 
 		{	
 			Class.forName("org.sqlite.JDBC");
 			con = DriverManager.getConnection(url);
 			stm = con.createStatement();
 			stm1 = con.createStatement();
-			String sql = null;
-			
-			if(choice.equals("node")) {
-				_name = "node_id";
-				sql = "SELECT '"+_name+"' FROM nodes_tags WHERE tag_key='"+attName+"'";
-			}else if(choice.equals("way")) {
-				_name = "way_id";
-				sql = "SELECT '"+_name+"' FROM ways_tags WHERE tag_key='"+attName+"'";
-			}else if(choice.equals("relation")) {
-				_name = "relation_id";
-				sql = "SELECT '"+_name+"' FROM relations_tags WHERE tag_key='"+attName+"'";
-			}else {
-				System.out.println("incorrect input, please input 'node' or 'way' or 'relation'.");
-				System.exit(0);
-			}
+	
+			setSqlQuery(attName);
 			
 			List<String> IDs = compare();
 			ResultSet res = stm.executeQuery(sql);
 			String temp;
-			System.out.println(sql);
-			while(res.next()) {
-				temp = String.valueOf(res.getInt(_name));
+
+			while(res.next())
+			{
+				temp = res.getString(input);
 				IDs.remove(temp);
 			}
 			
-			System.out.println("the '"+choice+"' which do not have '"+attName+"' attribute:");
+			String content = "";
 			
-			for(String id : IDs) {
-				System.out.println(id);
+			for(String id : IDs) 
+			{
+				String output = "missing_" + choice + "_" + attName + ": " + id;
+				content = content + output + "\r\n";
+				isFound = true;
 			}
+			
+			writeResult(content);
 			
 			stm.close();
 			con.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (ClassNotFoundException e) 
+		{
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (SQLException e) 
+		{
 			e.printStackTrace();
 		}
-		
+		if(isFound == false) 
+		{
+			System.out.println("no match found");
+		}
 	}
 
+	public void setSqlQuery(String attName) 
+	{
+		if(choice.equals("node")) 
+		{
+			input = "node_id";
+			sql = "SELECT node_id FROM nodes_tags WHERE tag_key='"+attName+"'";
+		}
+		else if(choice.equals("way")) 
+		{
+			input = "way_id";
+			sql = "SELECT way_id FROM ways_tags WHERE tag_key='"+attName+"'";
+		}
+		else if(choice.equals("relation"))
+		{
+			input = "relation_id";
+			sql = "SELECT relation_id FROM relations_tags WHERE tag_key='"+attName+"'";
+		}
+		else 
+		{
+			System.out.println("incorrect input, please input 'node' or 'way' or 'relation'.");
+			System.exit(0);
+		}
+	}
+	
 	private List<String> compare() throws SQLException 
 	{
-		// TODO Auto-generated method stub
 		String sql = "SELECT ID FROM '"+choice+"s'";
 		ResultSet res = stm1.executeQuery(sql);
 		List<String> IDs = new ArrayList<String>();
 		
-		while(res.next()) {
+		while(res.next())
+		{
 			IDs.add(res.getString("ID"));
 		}
 		stm1.close();
@@ -93,8 +117,5 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 	}
 
 	@Override
-	public void handleProblem() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void handleProblem() {}
 }

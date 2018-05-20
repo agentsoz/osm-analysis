@@ -141,12 +141,12 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 						// way_maxspeed: id1=speed1 id2=speed2 diff=speed3
 						String output = "way_maxspeed_diff: " + "way_" + ways.get(i).getId() + "=" + ways.get(i).getSpeed()
 						         + " " + "way_" + ways.get(j).getId() + "=" + ways.get(j).getSpeed() + " diff=" + actual_gap;	
-						content = content + "\r\n" + output;
+						content = content + output + "\r\n";
 					}
 				}
 			}
 		}
-		writeToFile(content);
+		writeResult(content);
 	}
 
 }

@@ -11,14 +11,12 @@ import agentsoz.osm.analysis.models.RunningPrompt;
 
 public abstract class BasicProblemHandler {
 
-	boolean writeFile;
 	boolean isFound;
 	String path;
 	Timer timer;
 	
 	public BasicProblemHandler()
 	{
-		writeFile = false;
 		isFound = false;
 	}
 	
@@ -55,7 +53,7 @@ public abstract class BasicProblemHandler {
 		return conn;
 	}
 	
-	public void writeToFile(String content) 
+	public void writeResult(String content) 
 	{
 		if(Main.file_path == null) 
 		{
