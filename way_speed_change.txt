@@ -1,4 +1,3 @@
-
 way_maxspeed_diff: way_116486102=25 way_166479189=110 diff=85
 way_maxspeed_diff: way_199296203=50 way_199468203=110 diff=60
 way_maxspeed_diff: way_231297550=110 way_246794384=50 diff=60

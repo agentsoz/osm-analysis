@@ -75,8 +75,12 @@ public class Main {
 			// get input osm file from user
 			if(cmd.hasOption("o")) 
 			{
-				OSM_FILE = cmd.getOptionValue("osm");
+				OSM_FILE = cmd.getOptionValue("o");
 				handler = new DataBaseHandler();
+			}
+			if(cmd.hasOption("h")) 
+			{
+				help();
 			}
 			// get input database file from user
 			// check if file exists
