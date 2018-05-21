@@ -31,7 +31,7 @@ usage: Menu
  -w,--out-file <arg>                      Write output to file,.txt/.db
 
 Test case examples:
-1. run without argument -> usage menu
+1. run without argument -> show usage/command line instruction
 
 2. -h/--help -> show usage/command line instruction
 
