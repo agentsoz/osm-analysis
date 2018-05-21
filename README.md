@@ -35,7 +35,7 @@ Test case examples:
 
 2. -h/--help -> show usage/command line instruction
 
-3. --write-osm-to-database mount_alexander_shire_network.osm -out-file osm2.db -> This reads from mount_alexander_shire_network.osm and creates a 'osm.db' in the root directory.
+3. --write-osm-to-database mount_alexander_shire_network.osm --out-file osm.db -> This reads from mount_alexander_shire_network.osm and creates a 'osm.db' in the root directory.
 
 4. --get-ways-relation-speed --in-file osm.db -> print in console
 
