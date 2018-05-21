@@ -1,5 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+		                     http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>agentsoz.osm-analysis</groupId>
@@ -35,22 +37,27 @@
 		<plugin>
             <groupId>org.apache.maven.plugins</groupId>		
 			<artifactId>maven-assembly-plugin</artifactId>
-			<executions>
-			    <execution>
-				   <goals>
-					  <goal>single</goal>
-				   </goals>
-				   <configuration>
-				   <archive>
+			<version>2.4.1</version>
+			<configuration>
+                 <descriptorRefs>
+					  <descriptorRef>jar-with-dependencies</descriptorRef>
+				 </descriptorRefs>			 
+				 <archive>
 					<manifest>
 						<mainClass>agentsoz.osm.analysis.app.Main</mainClass>
 					</manifest>
-			    	</archive>
-				   <descriptorRefs>
-					  <descriptorRef>jar-with-dependencies</descriptorRef>
-				   </descriptorRefs>
+			    </archive>
+				   
 			</configuration>
-			    </execution>
+			<executions>
+				  <execution>
+					<id>make-assembly</id>
+                                        <!-- bind to the packaging phase -->
+					<phase>package</phase> 
+					<goals>
+						<goal>single</goal>
+					</goals>
+				  </execution>
 			</executions>
 		</plugin>
 
@@ -61,17 +68,6 @@
 		<configuration>
 			<source>1.8</source>
 			<target>1.8</target>
-			<showWarnings>false</showWarnings>
-			<showDeprecation>false</showDeprecation>
-			<encoding>UTF-8</encoding>
-			<!-- configure initial and maximal memory for compiling -->
-			<fork>true</fork>
-			<meminitial>128m</meminitial>
-			<maxmem>512m</maxmem>
-			<compilerArguments>
-				<Xmaxwarns>4000</Xmaxwarns>
-				<Xmaxerrs>100</Xmaxerrs>
-			</compilerArguments>
 		</configuration>
 	</plugin>
 	</plugins>

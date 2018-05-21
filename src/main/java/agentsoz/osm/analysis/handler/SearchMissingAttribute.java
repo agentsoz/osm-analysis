@@ -39,8 +39,7 @@ public class SearchMissingAttribute extends BasicProblemHandler{
 
 	
 			setSqlQuery(attName);
-
-			String sql = null;			
+		
 			List<String> IDs = compare();
 			ResultSet res = stm.executeQuery(sql);
 			String temp;

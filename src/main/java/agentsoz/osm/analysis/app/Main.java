@@ -1,5 +1,7 @@
 package agentsoz.osm.analysis.app;
 
+import java.io.File;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -47,15 +49,18 @@ public class Main {
 		// create the options
 		options = new Options();
 		
-		options.addOption("osm", "write-osm-to-database", true, "Write given osm file into database");
+		options.addOption("o", "write-osm-to-database", true, "Write given osm file into database, command line --out-file needed");
+		options.addOption("h", "help", false, "Show usage");
 		options.addOption("f", "in-file", true,  "Input database");
-		options.addOption("w", "out-file", true, "Write output to file");
-		options.addOption("s", "search-missing", true, "Search missing attribute of certain type");
-		options.addOption("v", "value", true, "value of searching operation");
-		options.addOption("way", false, "choose type way");
-		options.addOption("relation", true, "choose type relation");
-		options.addOption("opt1", "get-ways-speed-change", true, "get two adjacent way speed difference greater than input value");
-		options.addOption("opt2", "get-ways-relation-speed-change", false, "get ways' max_speed exceed its relation");
+		options.addOption("w", "out-file", true, "Write output to file,.txt/.db");
+		options.addOption("s", "search-missing", true, "Search missing attribute of certain type, "
+				       + "parameter: type ");
+		options.addOption("v", "value", true, "Search missing_attribute name of chosen type");
+		options.addOption("opt1", "get-ways-speed-change", true, 
+				       "Find information where speed difference between two adjacent ways is greater than input value,"
+				       + " parameter: speed limit");
+		options.addOption("opt2", "get-ways-relation-speed-change", false, 
+				       "Find information where max_speed of a way exceed the relation it within");
 		
 		try 
 		{	
@@ -68,26 +73,37 @@ public class Main {
 				help();
 			}
 			// get input osm file from user
-			if(cmd.hasOption("osm")) 
+			if(cmd.hasOption("o")) 
 			{
 				OSM_FILE = cmd.getOptionValue("osm");
 				handler = new DataBaseHandler();
 			}
 			// get input database file from user
+			// check if file exists
 			if(cmd.hasOption("f")) 
 			{
 				dbUrl = cmd.getOptionValue("f");	
+				
+				File file = new File(dbUrl);
+				if(!file.exists()) 
+				{
+					System.out.println("File " + dbUrl + " not exist");
+					help();
+				}
 			}
 			// write file
 			if(cmd.hasOption("w")) 
 			{
 				String path = cmd.getOptionValue("w");
 				file_path = path;
+				
+				File file = new File(file_path);
+				if(file.exists()) 
+				{
+					System.out.println("File " + file_path + " already exist");
+					help();
+				}
 			}
-			if(cmd.hasOption("way")) 
-			{
-				type = "ways";
-			} 
 			// search missing value : get type of the value
 			if(cmd.hasOption("s")) 
 			{
