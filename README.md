@@ -44,3 +44,8 @@ Test case examples:
 6. --search-missing way -value maxspeed --in-file osm.db  ->  search way which doesn't have attribute "maxspeed"
 
 7. --search-missing relation -value name --in-file osm.db missing_relation_name.txt -> search relation which doesn't have attribute "name" and write result into missing_relation_name.txt.
+
+8. run test case 5 argument twice -> prompt: file alreay exist
+
+9. run --in-file with database which doesnt't exist -> prompt : file not exist
+
