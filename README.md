@@ -35,7 +35,7 @@ usage: Menu
 Here are some examples of how to use the program:
 1. `-h, --help`: show usage/command line instruction; also the defautl behaviour if run with no arguments
 
-1. ``--write-osm-to-database mount_alexander_shire_network.osm --out-file osm.db`: This reads from `mount_alexander_shire_network.osm` and creates a `osm.db` in the root directory.
+1. `--write-osm-to-database mount_alexander_shire_network.osm --out-file osm.db`: This reads from `mount_alexander_shire_network.osm` and creates a `osm.db` in the root directory.
 
 1. `--get-ways-relation-speed --in-file osm.db`: print in console
 
