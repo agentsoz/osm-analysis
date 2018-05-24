@@ -7,6 +7,12 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+ * some relations have attribute called short_name
+ * and the precondition of short_name is name
+ * thus, if a relation does not have name, but has short_name
+ * it could be incorrect
+ * */
 public class NameShortNameProblemHandler extends PrerequisitesProblemHandler {
 
 	static final Logger LOG = Logger.getLogger(NameShortNameProblemHandler.class.getName());

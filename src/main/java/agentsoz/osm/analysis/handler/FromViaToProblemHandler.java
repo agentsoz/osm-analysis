@@ -7,6 +7,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * for example: in relation,
+ *  <member type="way" ref="431199097" role="from"/> (way1)
+ *  <member type="node" ref="1871199633" role="via"/> (node1)
+ *  <member type="way" ref="431199095" role="to"/>	(way2)
+ *  thus, the last node of way1 should equal to the node1
+ *  	  the first node of way2 should equal to the node1
+ * */
 public class FromViaToProblemHandler extends BasicProblemHandler {
 	
 	int countIssue = 0;

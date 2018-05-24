@@ -9,6 +9,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+ * in the relation, there is a attribute called tag_key = route, tag_value = bicycle
+ * in the way, there is a attribute called bicycle = yes/no
+ * thus, assume there is a way in the relation, 
+ * if the relation has the attribute above, while in the way bicycle = no
+ * this could be incorrect
+ * */
 public class SameRouteInRWProblemHandler extends BasicProblemHandler {
 	
 	private int count = 0;
