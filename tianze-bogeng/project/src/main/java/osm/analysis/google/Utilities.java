@@ -47,13 +47,13 @@ public class Utilities {
 			System.out.println("No result. Please consider changing some of your arguments.");
 		
 		else{
-			System.out.println("\n------------------------------------- Summary --------------------------------------\n");
-			System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s%-15s%-15s%-15s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff (%)","Time Diff (ms)","Dist Diff (%)","Dist Diff (m)");
+			System.out.println("\n--------------------------------------------------- Summary ----------------------------------------------------\n");
+			System.out.printf("%-5s%-24s%-24s%-11s%-12s%-13s%-14s%-13s%-13s","No.","Origin","Destination","OSM(ms)","Google(ms)","Time Diff(%)","Time Diff(ms)","Dist Diff(%)","Dist Diff(m)");
 			System.out.println();
 			DecimalFormat df = new DecimalFormat("0.000");
 			DecimalFormat df2  = new DecimalFormat("0");
 			for(Route route : record){
-					System.out.printf("%-5s%-24s%-24s%-13s%-17s%-15s%-15s%-15s%-15s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,df.format(route.tDifPer*100),df2.format(route.tDifMs),df.format(route.dDifPer*100),df2.format(route.dDifM));
+					System.out.printf("%-5s%-24s%-24s%-11s%-12s%-13s%-14s%-13s%-13s",id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,route.oTime,route.gTime,df.format(route.tDifPer*100),df2.format(route.tDifMs),df.format(route.dDifPer*100),df2.format(route.dDifM));
 					System.out.println();
 			}
 		}
