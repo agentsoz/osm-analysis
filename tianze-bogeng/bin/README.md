@@ -1,5 +1,5 @@
 Enter /project and input "mvn clean install"
-Then input "java -cp target/project-1.0-SNAPSHOT.jar osm.analysis.google Main" plus arguments below
+Then input "java -cp target/project-1.0-SNAPSHOT.jar osm.analysis.google.Main" plus arguments below
 
 1.To input a list of origin/dest:
 --list-of-origin/dest   (JSON format)

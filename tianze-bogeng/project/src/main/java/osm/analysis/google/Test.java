@@ -17,8 +17,10 @@ public class Test {
 
 	public static void main(String[] args) throws IOException  {
 
-		String str = "{routes:[{ori:{lat:130.3334444,lon:2},dest:{lat:1,lon:2}}]}";
-		
+		String str = null;
+		if(str==null)
+			System.out.println("a");
+		System.out.println(str);
 //		JSONObject j = new JSONObject(str);
 //		System.out.println(j.getJSONArray("routes").getJSONObject(0).getJSONObject("ori").getDouble("lat"));
 //		Node node1 = new Node(); node1.lat="-36.4333464"; node1.lon="148.6149967";

@@ -164,10 +164,11 @@ public class Sender {
 		}
 		return route;
 }
-	
+	//AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I
 	// Only get gTime and gDis without specifying waypoints.
 	public static Route gooSimple(Route route) throws IOException{
-		String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
+		
+		String key = "AIzaSyAiRVi8NroREE-jxJwyKiy3MC0RCGzfu18";
 		String req = "https://maps.googleapis.com/maps/api/directions/json?origin="+route.orig.lat+","+route.orig.lon+"&destination="+route.dest.lat+","+route.dest.lon+"&departure_time=1532966400&key=" + key;
 		String res = readReq(req);
 		JSONObject json = new JSONObject(res);
@@ -182,7 +183,7 @@ public class Sender {
 	
 	public static Route goo(Route route) throws IOException{
 			
-			String key = "AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I";
+			String key = "AIzaSyAiRVi8NroREE-jxJwyKiy3MC0RCGzfu18";
 			String req = "https://maps.googleapis.com/maps/api/directions/json?origin="+route.orig.lat+","+route.orig.lon+"&destination="+route.dest.lat+","+route.dest.lon+"&departure_time=1532966400&waypoints=";
 			
 			// Insert all nodes into request.
