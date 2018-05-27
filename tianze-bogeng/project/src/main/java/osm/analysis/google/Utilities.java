@@ -114,7 +114,7 @@ public class Utilities {
 			try {	
 				curr = Sender.goo(Sender.osm(ori, dest));
 				routes.add(curr);
-				System.out.println("Generated: "+routes.get(0).orig.lat+","+curr.orig.lon+"/"+curr.dest.lat+","+curr.dest.lon);
+				System.out.println("Generated: "+curr.orig.lat+","+curr.orig.lon+"/"+curr.dest.lat+","+curr.dest.lon);
 			} catch (IOException e) {
 				System.out.println("Failed to generate one route.");
 			}
