@@ -53,7 +53,8 @@ public class Main {
 				summaryPath = args[i+1];
 			if(args[i].equals("--detail-store-path"))
 				detailPath = args[i+1];
-			if(args[i].equals("--list-of-origin/dest")){
+			if(args[i].equals("--list-of-orig/dest")){
+				
 				 routes = Utilities.parseCoorList(args[i+1]);
 			}
 			else if(args[i].equals("--generate-random-origins")){
