@@ -14,7 +14,7 @@ public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
 		
-		
+		System.out.println();
 		while (validation(args) == true){
 			parse(args);
 			return;
