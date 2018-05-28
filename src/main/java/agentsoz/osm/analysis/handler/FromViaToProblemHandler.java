@@ -132,11 +132,11 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		
 		if(wayIDs.contains(nodes[0]) && wayIDs.contains(nodes[2]))
 		{
-			check(nodes,relationID);
+			check(nodes);
 		}
 	}
 
-	private void check(String[] nodes, int relationID) throws SQLException
+	private void check(String[] nodes) throws SQLException
 	{
 		// if all 3 nodes not null
 		if(!(nodes[0].equals("") || nodes[1].equals("") || nodes[2].equals(""))) 
