@@ -58,7 +58,7 @@ public abstract class BasicProblemHandler {
 	{
 		if(Main.file_path == null) 
 		{
-			System.out.print(content);
+			System.out.print(content);	
 		}
 		if(Main.file_path != null)
 		{
