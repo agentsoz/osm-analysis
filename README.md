@@ -39,7 +39,7 @@ Here are some examples of how to use the program:
 
 1. `--get-ways-relation-speed --in-file osm.db`: print in console
 
-1. `--get-ways-speed-change 50 -file osm.db --out-file way_speed_change.txt`: write results to text file
+1. `--get-ways-speed-change 50 --in-file osm.db --out-file way_speed_change.txt`: write results to text file
 
 1. `--search-missing way -value maxspeed --in-file osm.db`:  search way which doesn't have attribute `maxspeed`
 
