@@ -109,44 +109,70 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 	
 	private void compare(List<Way> ways) throws SQLException
 	{	
-		String way_i_f;
-		String way_i_l;
-		String way_j_f;
-		String way_j_l;
+		String way_i_f;	//the first node of way "i"
+		String way_i_l; //the last node of way "i"
+		String way_j_f; //the first node of way "j"
+		String way_j_l; //the last node of way "j"
 
-		String content = "";
-		
+		String content = ""; //output
+		//compare every two ways which actual_gap > speed_gap
 		for(int i=0;i<ways.size();i++) 
 		{
+
 			int i_size = ways.get(i).getNodesRef().size();
 			way_i_f = ways.get(i).getNodesRef().get(0);
  			way_i_l = ways.get(i).getNodesRef().get(i_size-1);
 			
 			for(int j=i+1;j<ways.size()-1;j++)
 			{
-				int j_size = ways.get(j).getNodesRef().size();
-				way_j_f = ways.get(j).getNodesRef().get(0);
-				way_j_l = ways.get(j).getNodesRef().get(j_size-1);
+				int actual_gap = Math.abs(ways.get(i).getSpeed() - ways.get(j).getSpeed());
 				
-				if(way_i_f.equals(way_j_f) ||
-						way_i_f.equals(way_j_l) || 
-							way_i_l.equals(way_j_l) ||
-								way_i_l.equals(way_j_f))
-				{
-					int actual_gap = Math.abs(ways.get(i).getSpeed() - ways.get(j).getSpeed());
-					if(actual_gap > speed_gap) 
+				//if the actual_gap > speed_gap, no need to compare the node, just continue
+				if(actual_gap > speed_gap) {
+					
+					int j_size = ways.get(j).getNodesRef().size();
+					way_j_f = ways.get(j).getNodesRef().get(0);
+					way_j_l = ways.get(j).getNodesRef().get(j_size-1);
+					
+					//if the two ways are connected but don't intersect
+					if(way_i_f.equals(way_j_f) ||
+							way_i_f.equals(way_j_l) || 
+								way_i_l.equals(way_j_l) ||
+									way_i_l.equals(way_j_f))
 					{
 						isFound = true;
-						
 						// way_maxspeed: id1=speed1 id2=speed2 diff=speed3
 						String output = "way_maxspeed_diff: " + "way_" + ways.get(i).getId() + "=" + ways.get(i).getSpeed()
 						         + " " + "way_" + ways.get(j).getId() + "=" + ways.get(j).getSpeed() + " diff=" + actual_gap;	
 						content = content + output + "\r\n";
+						continue;
 					}
+					
+					//if two ways are intersect
+					String node_k; //node from way i
+					String node_l; //node from way j
+					
+					//compare every two nodes from two ways to judge if they intersect
+					for(int k=0;k<ways.get(i).getNodesRef().size();k++) {
+						node_k = ways.get(i).getNodesRef().get(k);
+						for(int l=k+1;l<ways.get(j).getNodesRef().size()-1;l++) {
+							node_l = ways.get(j).getNodesRef().get(l);
+							if(node_k.equals(node_l)) {
+								isFound = true;
+								// way_maxspeed: id1=speed1 id2=speed2 diff=speed3
+								String output = "way_maxspeed_diff: " + "way_" + ways.get(i).getId() + "=" + ways.get(i).getSpeed()
+								         + " " + "way_" + ways.get(j).getId() + "=" + ways.get(j).getSpeed() + " diff=" + actual_gap;	
+								content = content + output + "\r\n";
+							}
+						}
+					}
+					
+				} else {
+					continue;
 				}
+
 			}
 		}
 		writeResult(content);
 	}
-
 }

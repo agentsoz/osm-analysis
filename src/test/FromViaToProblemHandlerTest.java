@@ -9,9 +9,13 @@ private String[] nodes;
 	
 	private String relationID;
 
+	/*
+	 * nodes[0]: the last node of the "from" way
+	 * nodes[1]: the "via" node
+	 * nodes[2]: the first node of the "to" way
+	 */
 	@Before
 	public void setUp() throws Exception {
-	//	relationID = "16888";
 	//	nodes = {"","",""};
 	}
 	@Test

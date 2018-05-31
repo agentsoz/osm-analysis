@@ -11,7 +11,13 @@ import java.util.Timer;
 import agentsoz.osm.analysis.models.Relation;
 import agentsoz.osm.analysis.models.Way;
 
-
+/*
+ * in the relation, there is a attribute called maxspeed,
+ * in the way, there is also a attribute called maxspeed,
+ * as in a relation, there could be one or more ways,
+ * thus, if a way is in relation, and both way and relation has maxspeed,
+ * the maxspeed of way should not be more than the maxspeed of the relation
+ * */
 public class RelationSpeedProblemHandler extends BasicProblemHandler{
 
 	public String url;

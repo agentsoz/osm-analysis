@@ -9,13 +9,13 @@ public class Route {
 	public Node dest;
 	public ArrayList<Node> nodes;
 	public int oTime;
-	public double oDis;
 	public int gTime;
+	public double tDifPer;
+	public double tDifMs;
+	public double oDis;
 	public double gDis;
-	public double timeDif;
-	public double disDif;
-	public double timeDifMs;
-	public double disDifM;
+	public double dDifPer;
+	public double dDifM;
 	
 	public Route(){
 		
@@ -37,9 +37,9 @@ public class Route {
 			big = this.oTime;
 		else
 			big = this.gTime;
-		DecimalFormat df = new DecimalFormat("0.00000");
-		this.timeDif = Double.parseDouble(df.format(Math.abs((this.gTime - this.oTime)/big)));
-		this.timeDifMs = Math.abs(this.gTime - this.oTime);
+		DecimalFormat df = new DecimalFormat("0.000000");
+		this.tDifPer = Double.parseDouble(df.format(Math.abs((this.gTime - this.oTime)/big)));
+		this.tDifMs = Math.abs(this.gTime - this.oTime);
 		
 		// Store distance diff
 		double big2 ;
@@ -49,7 +49,7 @@ public class Route {
 		else
 			big2 = this.gDis;
 		
-		this.disDif = Double.parseDouble(df.format(Math.abs((this.gDis - this.oDis)/big2)));
-		this.disDifM = Math.abs(this.gDis - this.oDis);
+		this.dDifPer = Double.parseDouble(df.format(Math.abs((this.gDis - this.oDis)/big2)));
+		this.dDifM = Math.abs(this.gDis - this.oDis);
 	}
 }

@@ -7,6 +7,13 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+ * for example, in the relation there are some attribute below:
+ * line 1: <tag k="type" v="restriction"/>
+ * line 2: <tag k="restriction" v="no_u_turn"/>
+ * as line 1 is the precondition of line 2,
+ * thus, if line 1 is missing, line 2 is exist, it could be incorrect
+ * */
 public class TypeRestrictionProblemHandler extends PrerequisitesProblemHandler {
 
 	static final Logger LOG = Logger.getLogger(TypeRestrictionProblemHandler.class.getName());

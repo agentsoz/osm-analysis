@@ -7,6 +7,16 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+ * for example, in relation, has the attribute below:
+ *  line 1:   <tag k="type" v="boundary"/>  
+ *  line 2:   <tag k="boundary" v="administrative"/>     
+ *  line 3:   <tag k="admin_level" v="6"/>
+ * if the line 3 is exist, while line 2 is missing, it could be incorrect
+ * if the line 2 is exist, while line 1 is missing, it could be incorrect
+ * which means the line 1 is the precondition of line 2, 
+ * the line 1 and line 2 is the precondition of line3
+ * */
 public class TypeBoundaryProblemHandler extends PrerequisitesProblemHandler {
 
 	static final Logger LOG = Logger.getLogger(TypeBoundaryProblemHandler.class.getName());
