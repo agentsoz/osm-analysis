@@ -31,6 +31,7 @@ public abstract class BasicProblemHandler {
 	{
 		timer.cancel();
 		timer.purge();
+		System.out.println();
 	}
 	
 	/**
