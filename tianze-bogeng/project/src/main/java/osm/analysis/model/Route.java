@@ -8,14 +8,14 @@ public class Route {
 	public Node orig;
 	public Node dest;
 	public ArrayList<Node> nodes;
-	public int oTime;
-	public int gTime;
+	public double oTime; 
+	public double gTime;
 	public double tDifPer;
-	public double tDifMs;
-	public double oDis;
-	public double gDis;
+	public double tDifHr;
+	public double oDist; 
+	public double gDist; 
 	public double dDifPer;
-	public double dDifM;
+	public double dDifKm;
 	
 	public Route(){
 		
@@ -24,32 +24,49 @@ public class Route {
 	public Route(Node orig, Node dest,int oTime, double oDis){
 		nodes = new ArrayList<Node>();
 		this.oTime = oTime;
-		this.oDis = oDis;
+		this.oDist = oDis;
 		this.orig = orig;
 		this.dest = dest;
 	}
 	
+	
 	public void format(){
+		
+		DecimalFormat df = new DecimalFormat("0.000");
+		
+		// ms to hr
+		oTime /= 3600000;
+		gTime /= 3600000;
+		// m to km
+		oDist /= 1000;
+		gDist /= 1000;
+		
+		oTime = Double.parseDouble(df.format(oTime));
+
+		gTime = Double.parseDouble(df.format(gTime));
+
+		oDist = Double.parseDouble(df.format(oDist));
+
+		gDist = Double.parseDouble(df.format(gDist));
+		
 		double big;
-		
-		// Store time diff
-		if(this.oTime > this.gTime)
-			big = this.oTime;
+		if(oTime > gTime)
+			big = oTime;
 		else
-			big = this.gTime;
-		DecimalFormat df = new DecimalFormat("0.000000");
-		this.tDifPer = Double.parseDouble(df.format(Math.abs((this.gTime - this.oTime)/big)));
-		this.tDifMs = Math.abs(this.gTime - this.oTime);
+			big = gTime;
 		
-		// Store distance diff
-		double big2 ;
-		if(this.oDis > this.gDis)
-			big2 =  this.oDis;
+		
+
+		tDifPer = Double.parseDouble(df.format(Math.abs((gTime - oTime)/big)*100));
+		tDifHr = Double.parseDouble(df.format(Math.abs(gTime - oTime)));
+		
+		if(oDist > gDist)
+			big =  oDist;
 		
 		else
-			big2 = this.gDis;
+			big = gDist;
 		
-		this.dDifPer = Double.parseDouble(df.format(Math.abs((this.gDis - this.oDis)/big2)));
-		this.dDifM = Math.abs(this.gDis - this.oDis);
+		dDifPer = Double.parseDouble(df.format(Math.abs((gDist - oDist)/big)*100));
+		dDifKm = Double.parseDouble(df.format(Math.abs(gDist - oDist)));
 	}
 }

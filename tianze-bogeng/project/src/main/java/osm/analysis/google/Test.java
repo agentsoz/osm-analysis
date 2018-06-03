@@ -9,18 +9,19 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+
+import org.json.JSONObject;
+
 import osm.analysis.model.Node;
 import osm.analysis.model.Route;
-import osm.org.json.JSONObject;
 
 public class Test {
 
 	public static void main(String[] args) throws IOException  {
 
-		String str = null;
-		if(str==null)
-			System.out.println("a");
-		System.out.println(str);
+		String[] a = new String[3];
+		if(a[0]==null)
+			System.out.println("aaaa");
 //		JSONObject j = new JSONObject(str);
 //		System.out.println(j.getJSONArray("routes").getJSONObject(0).getJSONObject("ori").getDouble("lat"));
 //		Node node1 = new Node(); node1.lat="-36.4333464"; node1.lon="148.6149967";

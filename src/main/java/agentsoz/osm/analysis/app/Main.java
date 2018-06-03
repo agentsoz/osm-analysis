@@ -65,7 +65,7 @@ public class Main {
 		try 
 		{	
 			cmd = parser.parse(options, args);
-	
+	 
 			// run main without command line arguments
 			// if return an empty array of the processed options 
 			if(cmd.getOptions().length == 0) 

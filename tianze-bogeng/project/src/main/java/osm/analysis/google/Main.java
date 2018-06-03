@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-import osm.analysis.model.*;
+import osm.analysis.model.Route;
 
 public class Main {
 
@@ -42,26 +42,22 @@ public class Main {
 		double distDiffPer = -1;
 		double timeDiffKm = -1;
 		double timeDiffPer = -1;
-		double timeDiffMs = -1;
+		double timeDiffHr = -1;
 		boolean distCompare = false;
 		boolean timeCompare = false;
 		String summaryPath = null;
 		String detailPath = null;
-		ArrayList<Route> routes = new ArrayList<Route>();
+		ArrayList<Route> inputRoutes = new ArrayList<Route>();
 		for(int i = 0; i < args.length; i++){
-			if(args[i].equals("--summary-store-path"))
-				summaryPath = args[i+1];
-			if(args[i].equals("--detail-store-path"))
-				detailPath = args[i+1];
+			
 			if(args[i].equals("--list-of-orig/dest")){
-				
-				 routes = Utilities.parseCoorList(args[i+1]);
+				 inputRoutes = Utilities.parseCoorList(args[i+1]);
 			}
 			else if(args[i].equals("--generate-random-origins")){
 				num = Integer.parseInt(args[i+1]);
 				for(int a = 0; a < num; a++){
 					Route route = Sender.ranRoute(radius);
-					routes.add(route);
+					inputRoutes.add(route);
 				}
 			}
 			if(args[i].equals("--radius-of-dest"))
@@ -75,41 +71,46 @@ public class Main {
 				distCompare = true;
 			}
 			if(args[i].equals("--time-diff-reporting-threshold-percent")){
-				timeDiffPer = Double.parseDouble(args[i+1])/100;
+				timeDiffPer = Double.parseDouble(args[i+1]);
 				timeCompare = true;
 			}
 			if(args[i].equals("--time-diff-reporting-threshold-hr")){
-				timeDiffMs = Double.parseDouble(args[i+1])*60*60*1000;
+				timeDiffHr = Double.parseDouble(args[i+1]);
 				timeCompare = true;
+			}
+			if(args[i].equals("--summary-store-path"))
+				summaryPath = args[i+1];
+			if(args[i].equals("--detail-store-path"))
+				detailPath = args[i+1];
+			if(args[i].equals("--analyze-route-id")){
+				ArrayList<Integer> id = Utilities.parseIdList(args[i+1]);
+				Utilities.storeDetail(id,detailPath);
 			}
 		}
 		
 		ArrayList<Route> record = new ArrayList<Route>();
-		//Analyse ALL routes
+
 		if(distCompare == true){
 			//Default 20%
 			if(distDiffPer == -1 && timeDiffKm == -1)
-				record = Utilities.dFilter(routes, 0.2);
+				record = Utilities.dFilter(inputRoutes, 20,"per");
 			else if(distDiffPer != -1)
-				record = Utilities.dFilter(routes, distDiffPer);
+				record = Utilities.dFilter(inputRoutes, distDiffPer,"per");
 			else
-				record = Utilities.dFilter(routes, timeDiffKm);
+				record = Utilities.dFilter(inputRoutes, timeDiffKm,"km");
 		}
 		else if(timeCompare == true){
-			if(timeDiffPer == -1 && timeDiffMs == -1)
-				record = Utilities.tFilter(routes, 0.2);
+			if(timeDiffPer == -1 && timeDiffHr == -1)
+				record = Utilities.tFilter(inputRoutes, 20, "per");
 			else if(timeDiffPer != -1)
-				record = Utilities.tFilter(routes, timeDiffPer);
+				record = Utilities.tFilter(inputRoutes, timeDiffPer,"per");
 			else
-				record = Utilities.tFilter(routes, timeDiffMs);
+				record = Utilities.tFilter(inputRoutes, timeDiffHr,"hr");
 		}
 		
 		Utilities.printSummary(record);
 		if(summaryPath != null)
 			Utilities.storeSummary(record,summaryPath);
-		if(detailPath != null)
-			Utilities.storeDetail(record, detailPath);
-
 	}
 }
 	

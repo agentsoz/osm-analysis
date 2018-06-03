@@ -9,10 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import osm.analysis.model.Node;
 import osm.analysis.model.Route;
-import osm.org.json.JSONArray;
-import osm.org.json.JSONObject;
 
 //https://maps.googleapis.com/maps/api/directions/json?origin=-37.170539,149.0752711&destination=-35.5213982,144.0558473&key=AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I
 //https://graphhopper.com/api/1/route?point=-37.170539,149.0752711&point=-35.5213982,144.0558473&points_encoded=true&key=7bf24aff-c48e-469f-a680-3d6fbe65388e
@@ -176,7 +177,7 @@ public class Sender {
 		int time = legs.getJSONObject(0).getJSONObject("duration").getInt("value");
 		int dis = legs.getJSONObject(0).getJSONObject("distance").getInt("value");
 		route.gTime = time*1000;
-		route.gDis = dis;
+		route.gDist = dis;
 		route.format();
 		return route;
 	}
@@ -209,7 +210,7 @@ public class Sender {
 				dis += legs.getJSONObject(i).getJSONObject("distance").getInt("value");
 			}
 			
-			route.gDis = dis;
+			route.gDist = dis;
 			route.format();
 			return route;
 	}
