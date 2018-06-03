@@ -176,7 +176,7 @@ public class Utilities {
 		
 		
 		Scanner scanner = null;
-		Writer writer = null;
+		FileWriter writer = null;
 		try {
 			scanner = new Scanner(new FileInputStream("temp.csv"));
 			scanner.nextLine();
@@ -186,6 +186,7 @@ public class Utilities {
 			Route curr = null;
 			writer = new FileWriter(path);
 			writer.write("ID,ORIGIN_LAT,ORIGIN_LON,DEST_LAT,DEST_LON,OSM_HR,OSM_KM,GOOGLE_HR,GOOGLE_KM");
+			// Search each line from temp.csv
 			while(scanner.hasNextLine()){
 				line = scanner.nextLine();
 				st = new StringTokenizer(line,",");
@@ -197,8 +198,7 @@ public class Utilities {
 					sec.lon = st.nextToken();
 					curr = Sender.goo(Sender.osm(fir, sec));
 					writer.write(no +","+ curr.orig.lat+","+curr.orig.lon+","+curr.dest.lat+","+curr.dest.lon+","+
-							+curr.oTime+","+curr.oDist+","+curr.gTime+","+curr.gDist+","+
-							curr.tDifPer+","+curr.dDifPer+"\n");
+							+curr.oTime+","+curr.oDist+","+curr.gTime+","+curr.gDist+"\n");
 					Iterator<Node> i1 = curr.nodes.iterator();
 					Iterator<Node> i2 = curr.nodes.iterator();
 					Node first,second;
@@ -208,19 +208,16 @@ public class Utilities {
 						first = i1.next();
 						second = i2.next();
 						Route div = Sender.gooSimple(Sender.osmSimple(first, second));
-						
-						writer.write(no+"."+subId++ +",origin="+div.orig.lat+","+div.orig.lon+",dest="+div.dest.lat+","+div.dest.lon
-									+",time_osm="+div.oTime+"ms,dist_osm="+div.oDist+"m,time_google="+div.gTime+"ms,dist_google="+div.gDist+"m\n");
-						
+						writer.write(no+"."+subId++ +","+div.orig.lat+","+div.orig.lon+","+div.dest.lat+","+div.dest.lon
+									+","+div.oTime+","+div.oDist+","+div.gTime+","+div.gDist+"\n");
 					}
 					writer.write("\n");
-					scanner.close();
-					writer.close();
 				}
 			}
+			scanner.close();
+			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
