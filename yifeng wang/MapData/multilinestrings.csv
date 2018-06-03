@@ -1,7 +1,0 @@
-osm_id,name,type,other_tags
-2898459,Ballarat Station - Bendigo Station via Maryborough & Castlemaine,route,"""network""=>""PTV - Regional Buses"",""operator""=>""Little's"",""ref""=>""1493"",""route""=>""bus"""
-2898836,Castlemaine - Maldon,route,"""network""=>""PTV - Mount Alexander Buses"",""operator""=>""Castlemaine"",""ref""=>""4"",""route""=>""bus"""
-5302106,Ballarat Road,route,"""network""=>""PTV - Regional Coaches"",""operator""=>""V/Line"",""public_transport:version""=>""2"",""ref""=>""V108"",""route""=>""bus"""
-7743589,Castlemaine to Maldon Trail,route,"""network""=>""lcn"",""route""=>""bicycle"""
-8014625,,route,"""addr:country""=>""AU"",""addr:state""=>""VIC"",""ref""=>""C283"",""route""=>""road"""
-8014626,,route,"""addr:country""=>""AU"",""addr:state""=>""VIC"",""ref""=>""C282"",""route""=>""road"""

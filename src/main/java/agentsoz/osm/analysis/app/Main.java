@@ -56,11 +56,13 @@ public class Main {
 		options.addOption("s", "search-missing", true, "Search missing attribute of certain type, "
 				       + "parameter: type ");
 		options.addOption("v", "value", true, "Search missing_attribute name of chosen type");
-		options.addOption("opt1", "get-ways-speed-change", true, 
+		options.addOption("o1", "get-ways-speed-change", true, 
 				       "Find information where speed difference between two adjacent ways is greater than input value,"
 				       + " parameter: speed limit");
-		options.addOption("opt2", "get-ways-relation-speed-change", false, 
+		options.addOption("o2", "get-ways-relation-speed-change", false, 
 				       "Find information where max_speed of a way exceed the relation it within");
+		options.addOption("o3", "get-realtion-name-shortname-missing", false, "Search relation that has attribute short_name"
+			           + ", but does not have attribute name");
 		
 		try 
 		{	
@@ -121,14 +123,18 @@ public class Main {
 				SearchMissingAttribute search = new SearchMissingAttribute(dbUrl); 
 				search.search(attribute);
 			}
-			if(cmd.hasOption("opt1")) 
+			if(cmd.hasOption("o1")) 
 			{
-				int speed_threshold = Integer.parseInt(cmd.getOptionValue("opt1"));
+				int speed_threshold = Integer.parseInt(cmd.getOptionValue("o1"));
 				handler = new MaxSpeedGapProblemHandler(dbUrl, speed_threshold);
 			}
-			if(cmd.hasOption("opt2")) 
+			if(cmd.hasOption("o2")) 
 			{
 				handler = new RelationSpeedProblemHandler(dbUrl);
+			}
+			if(cmd.hasOption("o3"))
+			{
+				handler = new NameShortNameProblemHandler(dbUrl);
 			}
 		}
 		catch(ParseException e)

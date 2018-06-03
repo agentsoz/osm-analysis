@@ -173,6 +173,13 @@ public class MaxSpeedGapProblemHandler extends BasicProblemHandler{
 
 			}
 		}
-		writeResult(content);
+		if(content == "") 
+		{
+			System.out.println("No match found");
+		}
+		else 
+		{
+			writeResult(content);	
+		}
 	}
 }
