@@ -43,4 +43,7 @@ Here are some examples of how to use the program:
 
 1. `--search-missing way -value maxspeed --in-file osm.db`:  search way which doesn't have attribute `maxspeed`
 
-1. `--search-missing relation -value name --in-file osm.db missing_relation_name.txt`: search relation which doesn't have attribute "name" and write result into `missing_relation_name.txt`.
+1. `--search-missing relation -value name --in-file osm.db missing_relation_name.txt`: search relation which doesn't have attribute "name" and write result into `missing_relation_name.txt
+
+1. `--get-relation-name-shortname-missing --in-file osm.db`: search relation that has attribute `short_name` but attribute `name` is missing.
+
