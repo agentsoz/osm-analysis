@@ -1,5 +1,5 @@
 Enter /project directory and input "mvn clean install"
-Then input "java -cp target/project-1.0-SNAPSHOT.jar osm.analysis.google.Main" plus arguments below
+Then input "java -cp target/project-1.0-SNAPSHOT-jar-with-dependencies.jar osm.analysis.google.Main" plus arguments below
 
 
 TO GENERATE A DATABASE FROM A *.OSM FILE FIRST
