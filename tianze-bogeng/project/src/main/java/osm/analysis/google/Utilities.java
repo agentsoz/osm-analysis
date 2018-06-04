@@ -17,6 +17,60 @@ import osm.analysis.model.Route;
 
 public class Utilities {
 
+	public static int num;
+	public static double radius = 0;
+	public static double distDiffPer = -1;
+	public static double timeDiffKm = -1;
+	public static double timeDiffPer = -1;
+	public static double timeDiffHr = -1;
+	public static boolean distCompare = false;
+	public static boolean timeCompare = false;
+	public static boolean random =false;
+	public static boolean detail = false;
+	public static String summaryPath = null;
+	public static String detailPath = null;
+	public static String dbPath;
+	public static ArrayList<Route> inputRoutes;
+	public static ArrayList<Integer> idList;
+	
+	public static void run(){
+		ArrayList<Route> record = new ArrayList<Route>();
+		
+		if(random == true){
+			for(int a = 0; a < Utilities.num; a++){
+				Route route = Sender.ranRoute(radius);
+				inputRoutes = new ArrayList<Route>();
+				inputRoutes.add(route);
+			}
+		}
+		
+		if(distCompare == true){
+			//Default 20%
+			if(distDiffPer == -1 && timeDiffKm == -1)
+				record = dFilter(inputRoutes, 20,"per");
+			else if(distDiffPer != -1)
+				record = dFilter(inputRoutes, distDiffPer,"per");
+			else
+				record = dFilter(inputRoutes, timeDiffKm,"km");
+			Utilities.printSummary(record);
+		}
+		else if(timeCompare == true){
+			if(timeDiffPer == -1 && timeDiffHr == -1)
+				record = tFilter(inputRoutes, 20, "per");
+			else if(timeDiffPer != -1)
+				record = tFilter(inputRoutes, timeDiffPer,"per");
+			else
+				record = tFilter(inputRoutes, timeDiffHr,"hr");
+			Utilities.printSummary(record);
+		}
+		
+		if(detail == true)
+			storeDetail(idList,detailPath);
+		
+		if(summaryPath != null)
+			storeSummary(record,summaryPath);
+	}
+	
 	public static ArrayList<Route> tFilter(ArrayList<Route> routes, double threshold,String type){
 
 		Iterator<Route> i = routes.iterator();
@@ -103,7 +157,7 @@ public class Utilities {
 					System.out.printf("%-5s%-24s%-24s%-8s%-11s%-14s%-13s%-9s%-11s%-14s%-13s",
 							id++,route.orig.lat+","+route.orig.lon,route.dest.lat+","+route.dest.lon,
 							route.oTime,route.gTime,route.tDifHr,route.tDifPer,
-							route.oDist,route.gDist,route.dDifPer,route.dDifKm);
+							route.oDist,route.gDist,route.dDifKm,route.dDifPer);
 					System.out.println();
 			}
 		}
@@ -173,8 +227,7 @@ public class Utilities {
 	}
 	
 	public static void storeDetail(ArrayList<Integer> idList, String path){
-		
-		
+	
 		Scanner scanner = null;
 		FileWriter writer = null;
 		try {
@@ -185,7 +238,8 @@ public class Utilities {
 			Node fir = new Node(); Node sec = new Node();
 			Route curr = null;
 			writer = new FileWriter(path);
-			writer.write("ID,ORIGIN_LAT,ORIGIN_LON,DEST_LAT,DEST_LON,OSM_HR,OSM_KM,GOOGLE_HR,GOOGLE_KM");
+			System.out.println("Start storing. It takes about 10-15s each route.");
+			writer.write("ID,ORIGIN_LAT,ORIGIN_LON,DEST_LAT,DEST_LON,OSM_HR,OSM_KM,GOOGLE_HR,GOOGLE_KM\n");
 			// Search each line from temp.csv
 			while(scanner.hasNextLine()){
 				line = scanner.nextLine();
@@ -196,6 +250,7 @@ public class Utilities {
 					fir.lon = st.nextToken();
 					sec.lat = st.nextToken();
 					sec.lon = st.nextToken();
+					System.out.println("Storing:"+fir.lat+","+fir.lon+"/"+sec.lat+","+sec.lon);
 					curr = Sender.goo(Sender.osm(fir, sec));
 					writer.write(no +","+ curr.orig.lat+","+curr.orig.lon+","+curr.dest.lat+","+curr.dest.lon+","+
 							+curr.oTime+","+curr.oDist+","+curr.gTime+","+curr.gDist+"\n");
@@ -214,6 +269,7 @@ public class Utilities {
 					writer.write("\n");
 				}
 			}
+			System.out.println("Storing finished.");
 			scanner.close();
 			writer.close();
 		} catch (IOException e) {
