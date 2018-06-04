@@ -33,7 +33,7 @@ public class Sender {
 					while(true){
 						ori = ranNode();
 						dest = ranNode();
-						if(Utilities.distance(ori,dest) <= radius){
+						if(Utilities.distance(ori,dest) <= radius*1000){
 							break;
 						}
 					}
@@ -98,7 +98,7 @@ public class Sender {
 		
 	public static Route osm(Node node1, Node node2) throws IOException{
 			
-			String key = "6b8e1ba3-dcfd-46a1-872a-cce6c73a6831";
+			String key = "c9fb231b-0997-4221-8669-cdeb6d0491d6";
 			String req = "https://graphhopper.com/api/1/route?point="+node1.lat+","+node1.lon+"&point="+node2.lat+","+node2.lon+"&points_encoded=false&key="+key;
 			
 			String res = readReq(req);
@@ -126,7 +126,7 @@ public class Sender {
 	
 	//Only get oTime and oDis, without filling the nodes ArrayList of Route object
 	public static Route osmSimple(Node node1, Node node2) throws IOException{
-		String key = "6b8e1ba3-dcfd-46a1-872a-cce6c73a6831";
+		String key = "c9fb231b-0997-4221-8669-cdeb6d0491d6";
 		String req = "https://graphhopper.com/api/1/route?point="+node1.lat+","+node1.lon+"&point="+node2.lat+","+node2.lon+"&points_encoded=false&key="+key;
 		
 		String res = readReq(req);
@@ -141,7 +141,7 @@ public class Sender {
 	
 	public static Route osm(String lat1, String lon1, String lat2, String lon2) throws IOException{
 		
-		String key = "6b8e1ba3-dcfd-46a1-872a-cce6c73a6831";
+		String key = "c9fb231b-0997-4221-8669-cdeb6d0491d6";
 		String req = "https://graphhopper.com/api/1/route?point="+lat1+","+lon1+"&point="+lat1+","+lon2+"&points_encoded=false&key="+key;
 		
 		String res = readReq(req);
@@ -239,7 +239,7 @@ public class Sender {
 	
 	public static Node ranNode() throws ClassNotFoundException, SQLException{
 		Class.forName("org.sqlite.JDBC");
-		Connection con = DriverManager.getConnection("jdbc:sqlite:osm.db");
+		Connection con = DriverManager.getConnection("jdbc:sqlite:"+Utilities.dbPath);
 		ResultSet rs = con.createStatement().executeQuery("SELECT * FROM nodes ORDER BY RANDOM() LIMIT 1");
 		rs.next();
 		Node node = new Node(rs.getString("lat"),rs.getString("lon"),rs.getString("id"));

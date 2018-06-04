@@ -17,11 +17,11 @@ import osm.analysis.model.Route;
 
 public class Test {
 
+	public static int a =10;
 	public static void main(String[] args) throws IOException  {
-
-		String[] a = new String[3];
-		if(a[0]==null)
-			System.out.println("aaaa");
+		
+		System.out.print(a);
+		a =5;
 //		JSONObject j = new JSONObject(str);
 //		System.out.println(j.getJSONArray("routes").getJSONObject(0).getJSONObject("ori").getDouble("lat"));
 //		Node node1 = new Node(); node1.lat="-36.4333464"; node1.lon="148.6149967";
