@@ -111,6 +111,8 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		int test = 0;
 		int check = 0;
 		
+		boolean ifVIAway = false;
+		
 		// check from via to with sequence
 		while(res.next())
 		{
@@ -122,6 +124,10 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 			}
 			else if(res.getString("member_role").equals("via") && (check == test + 1))
 			{
+				if(res.getString("member_type").equals("way")) 
+				{
+					ifVIAway = true;
+				}
 				nodes[1] = res.getString("member_ref");
 			}
 			else if(res.getString("member_role").equals("to") && (check == test + 2))
@@ -132,38 +138,80 @@ public class FromViaToProblemHandler extends BasicProblemHandler {
 		
 		if(wayIDs.contains(nodes[0]) && wayIDs.contains(nodes[2]))
 		{
-			check(nodes);
+			check(nodes, ifVIAway);
 		}
 	}
 
-	private void check(String[] nodes) throws SQLException
+	private void check(String[] nodes, boolean ifVIAway) throws SQLException
 	{
 		// if all 3 nodes not null
 		if(!(nodes[0].equals("") || nodes[1].equals("") || nodes[2].equals(""))) 
 		{
 			String sql_from = "SELECT node_id FROM ways_nodes WHERE way_id='"+nodes[0]+"'";
 			ResultSet res_from = stm3.executeQuery(sql_from);
-			String last_node = "";
+			ArrayList<String> nodes_first = new ArrayList<>();
 			
 			while(res_from.next()) 
 			{
-				last_node = res_from.getString("node_id");
+				nodes_first.add(res_from.getString("node_id"));
 			}
 			String sql_to = "SELECT node_id FROM ways_nodes WHERE way_id='"+nodes[2]+"'";
 			ResultSet res_to = stm4.executeQuery(sql_to);
-			String first_node = "";
+			ArrayList<String> nodes_last = new ArrayList<>();
 			
 			while(res_to.next())
 			{
-				first_node = res_to.getString("node_id");
-				break;
+				nodes_last.add(res_to.getString("node_id"));
 			}
-			if(!(first_node.equals(last_node) && first_node.equals(nodes[1]))) 
+			
+			ArrayList<String> nodes_via = new ArrayList<>();
+			
+			if(ifVIAway) 
+			{
+				String sql_via = "SELECT node_id FROM ways_nodes WHERE way_id = '"+nodes[1]+"'";
+				ResultSet res_via = stm.executeQuery(sql_via);
+				
+				while(res_via.next()) 
+				{
+					nodes_via.add(res_via.getString("node_id"));
+				}
+			}
+			
+			boolean ifcount = true;
+			
+			for(int i=0;i<nodes_first.size();i++) 
+			{
+				for(int j=0;j<nodes_last.size();j++) 
+				{
+					if(nodes_first.get(i).equals(nodes_last.get(j))) 
+					{
+						if(ifVIAway) 
+						{
+							for(int k=0;k<nodes_via.size();k++) 
+							{
+								if(nodes_via.get(k).equals(nodes_first.get(i))) 
+								{
+									ifcount = false;
+									break;
+								}
+							}
+						}
+						else 
+						{
+							if(nodes_first.get(i).equals(nodes[1])) 
+							{
+								ifcount = false;
+								break;
+							}
+						}
+					}
+				}
+			}
+			
+			if(!ifcount)
 			{
 				countIssue++;
 			}
 		}
-		
 	}
-	
 }
