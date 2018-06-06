@@ -11,7 +11,7 @@ The program can then be run as follows. The default behaviour is to exit with a 
 java -cp target/osm-analysis-1.0-SNAPSHOT-jar-with-dependencies.jar agentsoz.osm.analysis.app.Main
 
 usage: Menu
--c,--get-ways-speed-change <arg>           Find information where speed
+-c,--get-ways-speed-change <arg>            Find information where speed
                                             difference between two
                                             adjacent ways is greater than
                                             input value, parameter: speed
