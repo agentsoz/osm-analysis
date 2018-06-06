@@ -9,7 +9,7 @@ java -cp target/project-1.0-SNAPSHOT-jar-with-dependencies.jar osm.analysis.goog
 plus arguments below:
 
 
-###### TO GENERATE A DATABASE FROM A *.OSM FILE FIRST
+###### TO GENERATE A DATAeBASE FROM A *.OSM FILE FIRST
 
 1. Path of your .osm file (Compulsory)
 ```

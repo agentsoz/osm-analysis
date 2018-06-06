@@ -36,14 +36,16 @@ public class Utilities {
 	
 	public static void run(){
 		ArrayList<Route> record = new ArrayList<Route>();
-		inputRoutes = new ArrayList<Route>();
+		
 		Route curr = null;
 		if(random == true){
+			inputRoutes = new ArrayList<Route>();
 			for(int a = 0; a < Utilities.num; a++){
 				curr = Sender.ranRoute(radius);
 				inputRoutes.add(curr);
 			}
 		}
+		
 		
 		if(distCompare == true){
 			//Default 20%
@@ -145,11 +147,10 @@ public class Utilities {
 		
 		int id = 1;
 		if(record.size() == 0)
-		
 			System.out.println("No result. Please consider changing some of your arguments.");
 		
 		else{
-			System.out.println("\n--------------------------------------------------- Summary ----------------------------------------------------\n");
+			System.out.println("\n----------------------------------------------------------- Summary ------------------------------------------------------------\n");
 			System.out.printf("%-5s%-24s%-24s%-8s%-11s%-14s%-13s%-9s%-11s%-14s%-13s",
 					"No","Origin","Destination","OSM(hr)","Google(hr)","Time Diff(hr)","Time Diff(%)",
 					"OSM(km)","Google(km)","Dist Diff(km)","Dist Diff(%)");
@@ -258,7 +259,26 @@ public class Utilities {
 	}
 	
 	public static void printHelp(){
-		System.out.print("TO GENERATE A DATABASE FROM A *.OSM FILE FIRST");
+		System.out.print("TO GET HELP\n"
+				+"-help\n"
+				+"-h\n"
+				+"TO GENERATE A DATABASE FROM A *.OSM FILE FIRST\n"
+				+ "--osm-read-path\n"
+				+ "--db-store-path\n"
+				+ "TO GET A SUMMARY RESULT\n"
+				+ "--list-of-orig/dest\n"
+				+ "--generate-random-origins\n"
+				+ "--radius-of-dest\n"
+				+ "--db-read-path\n"
+				+ "--dist-diff-reporting-threshold-percent\n"
+				+ "--dist-diff-reporting-threshold-km\n"
+				+ "--time-diff-reporting-threshold-percent\n"
+				+ "--time-diff-reporting-threshold-hr\n"
+				+ "--summary-store-path\n"
+				+ "TO STORE DETAILED ANALYSIS\n"
+				+ "--input-summary-file\n"
+				+ "--analyze-route-id\n"
+				+ "--detail-store-path\n");
 	}
 	
 	//meters
