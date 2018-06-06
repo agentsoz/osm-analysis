@@ -13,7 +13,6 @@ import osm.analysis.model.Route;
 public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
-		
 		System.out.println();
 		while (validation(args) == true){
 			parse(args);
@@ -39,6 +38,8 @@ public class Main {
 	public static void parse(String args[]){
 
 		for(int i = 0; i < args.length; i++){
+			if(args[0].equals(null) || args[0].equals("-help") || args[0].equals("-h"))
+				Utilities.printHelp();
 			if(args[i].equals("--osm-read-path"))
 				DatabaseHandler.osmPath = args[i+1];
 			if(args[i].equals("--db-store-path")){
@@ -74,6 +75,8 @@ public class Main {
 			}
 			if(args[i].equals("--summary-store-path"))
 				Utilities.summaryPath = args[i+1];
+			if(args[i].equals("--input-summary-file"))
+				Utilities.inputSummaryPath = args[i+1];
 			if(args[i].equals("--detail-store-path")){
 				Utilities.detailPath = args[i+1];
 			}
@@ -81,6 +84,7 @@ public class Main {
 				Utilities.idList = Utilities.parseIdList(args[i+1]);
 				Utilities.detail = true;
 			}
+			
 		}
 		Utilities.run();
 		

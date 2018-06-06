@@ -29,18 +29,19 @@ public class Utilities {
 	public static boolean detail = false;
 	public static String summaryPath = null;
 	public static String detailPath = null;
+	public static String inputSummaryPath = null;
 	public static String dbPath;
 	public static ArrayList<Route> inputRoutes;
 	public static ArrayList<Integer> idList;
 	
 	public static void run(){
 		ArrayList<Route> record = new ArrayList<Route>();
-		
+		inputRoutes = new ArrayList<Route>();
+		Route curr = null;
 		if(random == true){
 			for(int a = 0; a < Utilities.num; a++){
-				Route route = Sender.ranRoute(radius);
-				inputRoutes = new ArrayList<Route>();
-				inputRoutes.add(route);
+				curr = Sender.ranRoute(radius);
+				inputRoutes.add(curr);
 			}
 		}
 		
@@ -65,7 +66,7 @@ public class Utilities {
 		}
 		
 		if(detail == true)
-			storeDetail(idList,detailPath);
+			storeDetail(idList,detailPath,inputSummaryPath);
 		
 		if(summaryPath != null)
 			storeSummary(record,summaryPath);
@@ -161,25 +162,6 @@ public class Utilities {
 					System.out.println();
 			}
 		}
-		writeTemp(record);
-	}
-	
-	public static void writeTemp(ArrayList<Route> record){
-		
-		FileWriter writer;
-		try {
-			writer = new FileWriter("temp.csv");
-			writer.write("ID,ORIGIN_LAT,ORIGIN_LON,DEST_LAT,DEST_LON\n");
-			Iterator<Route> iterator = record.iterator();
-			int id = 1;
-			while(iterator.hasNext()){
-				Route curr = iterator.next();
-				writer.write(id++ +","+ curr.orig.lat+","+curr.orig.lon+","+curr.dest.lat+","+curr.dest.lon+"\n");
-			}
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public static void storeSummary(ArrayList<Route> record, String path){
@@ -203,8 +185,6 @@ public class Utilities {
 		
 	}
 	
-
-	
 	public static ArrayList<Integer> parseIdList(String input){
 		StringTokenizer st = new StringTokenizer(input,",");
 		ArrayList<Integer> id = new ArrayList<Integer>();
@@ -226,19 +206,19 @@ public class Utilities {
 		return id;
 	}
 	
-	public static void storeDetail(ArrayList<Integer> idList, String path){
+	public static void storeDetail(ArrayList<Integer> idList, String detailPath,String inputSummaryPath){
 	
 		Scanner scanner = null;
 		FileWriter writer = null;
 		try {
-			scanner = new Scanner(new FileInputStream("temp.csv"));
+			scanner = new Scanner(new FileInputStream(inputSummaryPath));
 			scanner.nextLine();
 			String line = null;
 			StringTokenizer st = null;
 			Node fir = new Node(); Node sec = new Node();
 			Route curr = null;
-			writer = new FileWriter(path);
-			System.out.println("Start storing. It takes about 10-15s each route.");
+			writer = new FileWriter(detailPath);
+			System.out.println("Start storing detailed analysis into "+detailPath+". It takes about 15s each route.");
 			writer.write("ID,ORIGIN_LAT,ORIGIN_LON,DEST_LAT,DEST_LON,OSM_HR,OSM_KM,GOOGLE_HR,GOOGLE_KM\n");
 			// Search each line from temp.csv
 			while(scanner.hasNextLine()){
@@ -275,6 +255,10 @@ public class Utilities {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 		}
+	}
+	
+	public static void printHelp(){
+		System.out.print("TO GENERATE A DATABASE FROM A *.OSM FILE FIRST");
 	}
 	
 	//meters

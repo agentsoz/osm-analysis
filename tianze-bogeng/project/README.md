@@ -48,9 +48,14 @@ or
 --summary-store-path  (file path)
 ```
 
-###### TO STORE DETAILED ANALYSIS
+##### TO STORE DETAILED ANALYSIS
 
-1. (Compulsory) Store detailed analysis by route ID from the LAST summary analysis
+1. (Compulsory) Store detailed analysis by route ID from a summary file
+
+```
+--input-summary-file
+```
+
 ```
 --analyze-route-id (int,int,int,...)
 --analyze-route-id (int-int)
