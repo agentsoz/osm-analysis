@@ -11,23 +11,33 @@ The program can then be run as follows. The default behaviour is to exit with a 
 java -cp target/osm-analysis-1.0-SNAPSHOT-jar-with-dependencies.jar agentsoz.osm.analysis.app.Main
 
 usage: Menu
- -f,--in-file <arg>                       Input database
- -h,--help                                Show usage
- -o,--write-osm-to-database <arg>         Write given osm file into
-                                          database, command line
-                                          --out-file needed
- -opt1,--get-ways-speed-change <arg>      Find information where speed
-                                          difference between two adjacent
-                                          ways is greater than input
-                                          value, parameter: speed limit
- -opt2,--get-ways-relation-speed-change   Find information where max_speed
-                                          of a way exceed the relation it
-                                          within
- -s,--search-missing <arg>                Search missing attribute of
-                                          certain type, parameter: type
- -v,--value <arg>                         Search missing_attribute name of
-                                          chosen type
- -w,--out-file <arg>                      Write output to file,.txt/.db
+-c,--get-ways-speed-change <arg>           Find information where speed
+                                            difference between two
+                                            adjacent ways is greater than
+                                            input value, parameter: speed
+                                            limit
+ -f,--in-file <arg>                         Input database
+ -g,--get-mismatch-bicycle-way-relation     find information where
+                                            relation tag contain
+                                            bicycle_yes, while its ways
+                                            tag contain bicycle_no or do
+                                            not tag bicycle
+ -h,--help                                  Show usage
+ -m,--get-relation-name-shortname-missing   Search relation that has
+                                            attribute short_name, but does
+                                            not have attribute name
+ -o,--write-osm-to-database <arg>           Write given osm file into
+                                            database, command line
+                                            --out-file needed
+ -r,--get-ways-relation-speed-change        find information where
+                                            max_speed of a way exceed the
+                                            relation it within
+ -s,--search-missing <arg>                  Search missing attribute of
+                                            certain type, parameter: type
+ -v,--value <arg>                           Search missing_attribute name
+                                            of chosen type
+ -w,--out-file <arg>                        Write output to file,.txt/.db
+
 
 ```
 
