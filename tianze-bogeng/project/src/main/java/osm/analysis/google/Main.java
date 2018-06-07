@@ -12,13 +12,14 @@ import osm.analysis.model.Route;
 
 public class Main {
 
+	public static boolean validated = false;
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, IOException {
-		Utilities.printHelp();
-//		System.out.println();
-//		while (validation(args) == true){
-//			parse(args);
-//			return;
-//		}
+
+		System.out.println();
+		while (validation(args) == true){
+			parse(args);
+			return;
+		}
 	}
 	
 	public static boolean validation(String args[]){

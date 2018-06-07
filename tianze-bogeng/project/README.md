@@ -88,5 +88,5 @@ Randomly generate 20 routes (length < 800km) from database and store the summary
 
 Store detailed result based on the summary result from last running, choose route id: 2,3,4,6
 ```
---input-file fullset.csv --analyze-route-id 2-4,6 --detail-store-path detail.csv
+--input-summary-file fullset.csv --analyze-route-id 2-4,6 --detail-store-path detail.csv
 ```

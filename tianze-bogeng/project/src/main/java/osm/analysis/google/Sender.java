@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import osm.analysis.model.Node;
@@ -50,6 +51,8 @@ public class Sender {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}catch(JSONException e){
+					continue;
 				}
 			}
 		}
