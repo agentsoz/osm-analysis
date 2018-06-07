@@ -46,11 +46,9 @@ public class Sender {
 				}catch(IOException e){
 					continue;
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("ClassNotFound Exception");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("SQL Exception");
 				}catch(JSONException e){
 					continue;
 				}
@@ -142,32 +140,6 @@ public class Sender {
 		return route;
 	}
 	
-	public static Route osm(String lat1, String lon1, String lat2, String lon2) throws IOException{
-		
-		String key = "c9fb231b-0997-4221-8669-cdeb6d0491d6";
-		String req = "https://graphhopper.com/api/1/route?point="+lat1+","+lon1+"&point="+lat1+","+lon2+"&points_encoded=false&key="+key;
-		
-		String res = readReq(req);
-	
-        JSONObject json = new JSONObject(res);
-		Double oDist = json.getJSONArray("paths").getJSONObject(0).getDouble("distance");
-		int oTime = json.getJSONArray("paths").getJSONObject(0).getInt("time");
-		
-		// Store ori, dest, oTime, oDist 
-		Node node1 = new Node(); node1.lat = lat1; node1.lon = lon1;
-		Node node2 = new Node(); node2.lat = lat2; node2.lon = lon2;
-		Route route = new Route(node1,node2,oTime,oDist);
-		JSONArray coor = json.getJSONArray("paths").getJSONObject(0).getJSONObject("points").getJSONArray("coordinates");
-		
-		// Pick about 20 nodes evenly.
-		for(int i = coor.length()/19; i < coor.length(); i = i+coor.length()/19){
-				JSONArray iterator = coor.getJSONArray(i);
-				double lat = iterator.getDouble(1);
-				double lon = iterator.getDouble(0);
-				route.nodes.add(new Node(lat,lon));
-		}
-		return route;
-}
 	//AIzaSyD1nCcuJA3fw9gGmAOsRVqpaxpxWUxEH2I
 	// Only get gTime and gDis without specifying waypoints.
 	public static Route gooSimple(Route route) throws IOException{
