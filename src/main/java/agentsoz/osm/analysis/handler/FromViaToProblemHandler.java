@@ -14,7 +14,7 @@ import java.util.List;
  *  <member type="way" ref="431199095" role="to"/>	(way2)
  *  thus, the last node of way1 should equal to the node1
  *  	  the first node of way2 should equal to the node1
- * */
+ * */ 
 public class FromViaToProblemHandler extends BasicProblemHandler {
 	
 	int countIssue = 0;

@@ -56,13 +56,15 @@ public class Main {
 		options.addOption("s", "search-missing", true, "Search missing attribute of certain type, "
 				       + "parameter: type ");
 		options.addOption("v", "value", true, "Search missing_attribute name of chosen type");
-		options.addOption("o1", "get-ways-speed-change", true, 
+		options.addOption("c", "get-ways-speed-change", true, 
 				       "Find information where speed difference between two adjacent ways is greater than input value,"
 				       + " parameter: speed limit");
-		options.addOption("o2", "get-ways-relation-speed-change", false, 
-				       "Find information where max_speed of a way exceed the relation it within");
-		options.addOption("o3", "get-realtion-name-shortname-missing", false, "Search relation that has attribute short_name"
+		options.addOption("r", "get-ways-relation-speed-change", false, 
+				       "find information where max_speed of a way exceed the relation it within");
+		options.addOption("m", "get-relation-name-shortname-missing", false, "Search relation that has attribute short_name"
 			           + ", but does not have attribute name");
+		options.addOption("g", "get-mismatch-bicycle-way-relation", false, "find information where relation tag contain "
+				       + "bicycle_yes, while its ways tag contain bicycle_no or do not tag bicycle");
 		
 		try 
 		{	
@@ -123,18 +125,22 @@ public class Main {
 				SearchMissingAttribute search = new SearchMissingAttribute(dbUrl); 
 				search.search(attribute);
 			}
-			if(cmd.hasOption("o1")) 
+			if(cmd.hasOption("c")) 
 			{
-				int speed_threshold = Integer.parseInt(cmd.getOptionValue("o1"));
+				int speed_threshold = Integer.parseInt(cmd.getOptionValue("c"));
 				handler = new MaxSpeedGapProblemHandler(dbUrl, speed_threshold);
 			}
-			if(cmd.hasOption("o2")) 
+			if(cmd.hasOption("r")) 
 			{
 				handler = new RelationSpeedProblemHandler(dbUrl);
 			}
-			if(cmd.hasOption("o3"))
+			if(cmd.hasOption("m"))
 			{
 				handler = new NameShortNameProblemHandler(dbUrl);
+			}
+			if(cmd.hasOption("g"))
+			{
+				handler = new BicycleInWayRelationProblemHandler(dbUrl);
 			}
 		}
 		catch(ParseException e)
